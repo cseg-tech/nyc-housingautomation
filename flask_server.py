@@ -5,7 +5,7 @@
 SETUP:
  - Navigate to project directory on terminal, ensure that depeendancies are installed
  - Install needed pip3 and pip packages: try running the scripts to see which ones are needed
- - export FLASK_APP=server.py
+ - export FLASK_APP=flask_server.py
  - python3 -m flask run (or just flask run, if your default is python3)
 '''
 from flask import Flask, request, session, g, redirect, url_for, abort, \
