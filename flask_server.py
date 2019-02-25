@@ -25,6 +25,7 @@ def loginUser():
 	password = hasher.digest()
 	result = "true"
 	statusCode = "0" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
+	#Connect to DB and insert, and then change the values of result and status code accordingly
 	resultJson = jsonify({"valid" : result, "status":statusCode})
 	return resultJson
 
@@ -37,6 +38,7 @@ def registerUser():
 	password = hasher.digest()
 	result = "true"
 	statusCode = "0"
+	#Connect to DB and insert, and then change the values of result and status code accordingly
 	resultJson = jsonify({"valid" : result, "status":statusCode})
 	return resultJson
 
