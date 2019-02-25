@@ -1,0 +1,33 @@
+<!-- templates/login.html -->  
+
+<html>
+  <div class="container">
+    <label for="uname"><b>Email ID</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Confirm Password" name="psw" required>
+
+    <button type="submit" onclick="registerUser()">Sign In</button>
+    <button type="button" class="cancelbtn" onclick="cancelRegistration()">Cancel</button>
+
+    <button class="psw" onclick="forgotUser()">Forgot password?</button>
+  </div>
+
+  <script>
+  function signInUser() {
+    //Add sign in POST call
+  }
+
+  function cancelSignIn() {
+    //Cancel sign in here
+  }
+
+  function forgotUser() {
+    //Add password reset call here
+  }
+  </script>
+ </html>
