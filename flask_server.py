@@ -27,6 +27,12 @@ def loginUser():
 	statusCode = "0" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 	#Connect to DB and insert, and then change the values of result and status code accordingly
 	resultJson = jsonify({"valid" : result, "status":statusCode})
+	'''
+	Status Codes:
+	0 - Sucessful
+	1 - Wrong Password
+	2 - Email ID doesn't exist
+	3 - Unforseen error'''
 	return resultJson
 
 @app.route('/registerUser', methods=['POST'])
@@ -40,6 +46,11 @@ def registerUser():
 	statusCode = "0"
 	#Connect to DB and insert, and then change the values of result and status code accordingly
 	resultJson = jsonify({"valid" : result, "status":statusCode})
+	'''
+	Status Codes:
+	0 - Sucessful
+	1 - Email ID already exists
+	2 - Unforseen error'''
 	return resultJson
 
 @app.route('/retrieveAddressList', methods=['POST'])
