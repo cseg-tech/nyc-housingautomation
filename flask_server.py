@@ -42,6 +42,7 @@ def registerUser():
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
+	address = request.form['address']
 	result = "true"
 	statusCode = "0"
 	#Connect to DB and insert, and then change the values of result and status code accordingly
