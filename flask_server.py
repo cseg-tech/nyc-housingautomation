@@ -49,6 +49,7 @@ def getAddressList():
 
 @app.route('/getUserStatus', methods=['POST'])
 def getUserStatus():
+    #return JSON of 
 	return "Placeholder"
 
 @app.route('/resetUserPassword', methods=['POST'])
