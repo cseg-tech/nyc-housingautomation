@@ -60,7 +60,8 @@ def getAddressList():
 
 @app.route('/getUserStatus', methods=['POST'])
 def getUserStatus():
-    #return JSON of 
+    #get passed user id -> query MongoDB to find address,
+    #querry NYCDB to see other complaints of same adress -> return JSON
 	return "Placeholder"
 
 @app.route('/resetUserPassword', methods=['POST'])
