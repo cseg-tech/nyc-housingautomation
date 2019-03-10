@@ -75,7 +75,8 @@ def resetPassword():
 #Begin page-serve routes
 @app.route('/', methods=['GET'])
 def serveIndex():
-	return render_template('/index.html')
+	getMyURL=getURL()
+	return render_template('/index.html',myKeyURL=getMyURL)
 
 @app.route('/login', methods=['GET'])
 def serveLogin():
@@ -86,3 +87,11 @@ def serveLogin():
 def serveSignUp():
 	return render_template('/signup.html')
 #endregion
+
+def getURL():
+	path = './apiKeys/placesKey.txt'
+	myKey = 'noKey'
+	with open(path, 'r') as myfile:
+		myKey = myfile.read()
+	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
+	return apiString
