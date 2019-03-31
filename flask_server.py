@@ -68,10 +68,24 @@ def getAddressList():
 	return "Placeholder"
 
 @app.route('/getUserStatus', methods=['POST'])
-def getUserStatus():
-    #get passed user id -> query MongoDB to find address,
+def getUserStatus(userID):
+    #get passed user id -> call getUserAdress to find address,
     #querry NYCDB to see other complaints of same adress -> return JSON
+    userAdress = getUserAdress(userID)
+    
 	return "Placeholder"
+
+@app.rout('/getUserAdress', methods=['GET'])
+def getUserAdress(id):
+    #query MongoDB to find address
+    person = mongo.db.people
+        x = person.find_one({'id' : id})
+        if x:
+            output = {'address' : x['address']}
+    else:
+        output = "Does not exist"
+
+    return output
 
 @app.route('/resetUserPassword', methods=['POST'])
 def resetPassword():
