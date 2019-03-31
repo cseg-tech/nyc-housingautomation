@@ -69,14 +69,14 @@ def getAddressList():
 
 @app.route('/getUserStatus', methods=['POST'])
 def getUserStatus(userID):
-    #get passed user id -> call getUserAdress to find address,
-    #querry NYCDB to see other complaints of same adress -> return JSON
-    userAdress = getUserAdress(userID)
-    
+    #get passed user id -> call getUserAddress to find address,
+    #query NYCDB to see other complaints of same address -> return JSON
+    userAddress = getUserAddress(userID)
+    complaints = getSameComplaints(userAddress)
 	return "Placeholder"
 
-@app.rout('/getUserAdress', methods=['GET'])
-def getUserAdress(id):
+@app.rout('/getUserAddress', methods=['GET'])
+def getUserAddress(id):
     #query MongoDB to find address
     person = mongo.db.people
         x = person.find_one({'id' : id})
@@ -117,3 +117,6 @@ def getURL():
 		myKey = myfile.read()
 	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
 	return apiString
+
+def getSameComplaints(userAddress):
+	return None;
