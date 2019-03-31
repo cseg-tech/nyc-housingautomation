@@ -11,9 +11,17 @@ SETUP:
 '''
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, Response
+
+from flask_pymongo import PyMongo
+
 import hashlib
 
 app = Flask(__name__)
+
+#PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
+#named myDatabase
+app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+mongo = PyMongo(app)
 
 #Begin Helper Routes
 @app.route('/loginUser', methods=['POST'])
