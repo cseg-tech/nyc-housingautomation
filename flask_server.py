@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
-app.config["MONGO_URI"] = "mongodb://localhost:27017/myDatabase"
+app.config["MONGO_URI"] = getMongoURI()
 mongo = PyMongo(app)
 
 #Begin Helper Routes
@@ -120,3 +120,11 @@ def getURL():
 
 def getSameComplaints(userAddress):
 	return None;
+
+def getMongoURI():
+	path = './apiKeys/mongoURI.txt'
+	myURI = ''
+	with open(path, 'r') as myfile:
+		myURI = myfile.read()
+	return myURI
+
