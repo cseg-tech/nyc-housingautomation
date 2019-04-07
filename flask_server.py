@@ -9,8 +9,7 @@ SETUP:
  - export FLASK_APP=flask_server.py
  - python3 -m flask run (or just flask run, if your default is python3)
 '''
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash, Response
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response
 
 from flask_pymongo import PyMongo
 
@@ -20,7 +19,11 @@ app = Flask(__name__)
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
-app.config["MONGO_URI"] = getMongoURI()
+path = './apiKeys/mongoURI.txt'
+myURI = ''
+with open(path, 'r') as myfile:
+	myURI = myfile.read()
+app.config["MONGO_URI"] = myURI
 mongo = PyMongo(app)
 
 #Begin Helper Routes
@@ -69,22 +72,21 @@ def getAddressList():
 
 @app.route('/getUserStatus', methods=['POST'])
 def getUserStatus(userID):
-    #get passed user id -> call getUserAddress to find address,
-    #query NYCDB to see other complaints of same address -> return JSON
-    userAddress = getUserAddress(userID)
-    complaints = getSameComplaints(userAddress)
+#get passed user id -> call getUserAddress to find address,
+#query NYCDB to see other complaints of same address -> return JSON
+	userAddress = getUserAddress(userID)
+	complaints = getSameComplaints(userAddress)
 	return "Placeholder"
 
-@app.rout('/getUserAddress', methods=['GET'])
+@app.route('/getUserAddress', methods=['GET'])
 def getUserAddress(id):
     #query MongoDB to find address
     person = mongo.db.people
-        x = person.find_one({'id' : id})
-        if x:
-            output = {'address' : x['address']}
+    x = person.find_one({'id' : id})
+    if x:
+    	output = {'address' : x['address']}
     else:
-        output = "Does not exist"
-
+    	output = "Does not exist"
     return output
 
 @app.route('/resetUserPassword', methods=['POST'])
@@ -120,11 +122,4 @@ def getURL():
 
 def getSameComplaints(userAddress):
 	return None;
-
-def getMongoURI():
-	path = './apiKeys/mongoURI.txt'
-	myURI = ''
-	with open(path, 'r') as myfile:
-		myURI = myfile.read()
-	return myURI
 
