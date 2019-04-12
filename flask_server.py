@@ -99,8 +99,7 @@ def resetPassword():
 #Begin page-serve routes
 @app.route('/', methods=['GET'])
 def serveIndex():
-	getMyURL=getURL()
-	return render_template('/index.html',myKeyURL=getMyURL)
+	return render_template('/index.html')
 
 @app.route('/login', methods=['GET'])
 def serveLogin():
@@ -110,6 +109,15 @@ def serveLogin():
 @app.route('/signup', methods=['GET'])
 def serveSignUp():
 	return render_template('/signup.html')
+
+@app.route('/mainpage', methods=['GET'])
+def serveMainPage():
+	getMyURL=getURL()
+	return render_template('/mainpage.html',myKeyURL=getMyURL)
+
+@app.route('/forgot', methods=['GET'])
+def serveForgot():
+	return render_template('/recover.html')
 #endregion
 
 def getURL():
@@ -122,4 +130,3 @@ def getURL():
 
 def getSameComplaints(userAddress):
 	return None;
-

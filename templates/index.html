@@ -2,28 +2,20 @@
 <html>
 
 <head>
-  <script src={{myKeyURL}}>
-  </script>
+
  </head>
   <body>
-    <div class="container">
-      <input id="searchTextField" type="text" size="50">
-    </div>
+  <button id="loginButton">Login</button>
+  <button id="signUpButton">Sign Up</button>
+  <button id="infoButton">Portal Info</button>
+  <script> 
+    document.getElementById("loginButton").onclick = function () {
+        location.href = "login";
+    };
 
-  <script>
-  function registerUser() {
-    //Add register POST call
-  }
-
-  function cancelRegistration() {
-    //Cancel registration here
-  }
-
-  function initialize() {
-  var input = document.getElementById('searchTextField');
-  new google.maps.places.Autocomplete(input);
-  }
-  google.maps.event.addDomListener(window, 'load', initialize);
+    document.getElementById("signUpButton").onclick = function () {
+        location.href = "signup";
+    };
   </script>
   </body>
  </html>
