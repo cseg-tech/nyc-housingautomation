@@ -16,6 +16,8 @@ from flask_pymongo import PyMongo
 import hashlib
 
 app = Flask(__name__)
+#COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -103,7 +105,7 @@ def serveIndex():
 
 @app.route('/login', methods=['GET'])
 def serveLogin():
-	return render_template('/login.html')
+	return render_template('/authenticate.html')
 
 
 @app.route('/signup', methods=['GET'])
