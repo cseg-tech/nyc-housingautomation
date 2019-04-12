@@ -2,19 +2,21 @@
 <html>
 
 <head>
-
- </head>
+  <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='resources/index.css') }}>
+</head>
   <body>
-  <button id="loginButton">Login</button>
-  <button id="signUpButton">Sign Up</button>
-  <button id="infoButton">Portal Info</button>
+  <div id="masterHero">
+    <button id="infoButton" class="topCorner">Portal Info</button>
+
+    <div id = "centralButtons">
+      <h2 id="mainHead"> Making housing complaints more accessible </h2>
+      <button id="loginButton">Enter Portal</button>
+    </div>
+
+  </div>
   <script> 
     document.getElementById("loginButton").onclick = function () {
         location.href = "login";
-    };
-
-    document.getElementById("signUpButton").onclick = function () {
-        location.href = "signup";
     };
   </script>
   </body>
