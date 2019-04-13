@@ -120,6 +120,11 @@ def serveMainPage():
 @app.route('/forgot', methods=['GET'])
 def serveForgot():
 	return render_template('/recover.html')
+
+@app.route('/locationDetails', methods=['GET'])
+def serveDetails():
+	locKey = request.args.get('locationID')
+	return render_template('/locationdetails.html',myLocationKey=locKey)
 #endregion
 
 def getURL():
