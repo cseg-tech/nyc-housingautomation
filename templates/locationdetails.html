@@ -5,5 +5,16 @@
 </head>
   <body>
     Hello! {{myLocationKey}}
+    <button onclick="getComplaints()">Get exisitng complaints at this location</button>
+    <button onclick="newComplaint()">Lodge a new complaint for this location</button>
+    <script type="text/javascript">
+      function getComplaints() {
+        console.log("Getting complaints from the same location");
+      }
+
+      function newComplaint() {
+        console.log("Lodging a new complaint from this location");
+      }
+    </script>
   </body>
  </html>
