@@ -105,7 +105,8 @@ def serveIndex():
 
 @app.route('/login', methods=['GET'])
 def serveLogin():
-	return render_template('/authenticate.html')
+	getMyURL=getURL()
+	return render_template('/authenticate.html',myKeyURL=getMyURL)
 
 
 @app.route('/signup', methods=['GET'])

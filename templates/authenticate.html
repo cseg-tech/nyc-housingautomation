@@ -3,6 +3,8 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='resources/authenticate.css') }}>
+  <script src={{myKeyURL}}>
+  </script>
 </head>
 <body>
   <section class="forms-section">
@@ -41,6 +43,20 @@
             <input id="signup-email" type="email" required>
           </div>
           <div class="input-block">
+            <label for="searchTextField">Address</label>
+            <input id="searchTextField" type="text" required="">
+          </div>
+          <div class="input-block">
+            <label for="signup-borough">Borough</label>
+            <select id="signup-borough" required>
+              <option value="manhattan">Manhattan</option>
+              <option value="brooklyn">Brooklyn</option>
+              <option value="queens">Queens</option>
+              <option value="bronx">The Bronx</option>
+              <option value="staten">Staten Island</option>
+            </select>
+          </div>
+          <div class="input-block">
             <label for="signup-password">Password</label>
             <input id="signup-password" type="password" required>
           </div>
@@ -74,7 +90,31 @@
 
   function signUpUser() {
     //Add sign in POST call
-    console.log("Inject data here");
+    var email = documet.getElementById('signup-email').value;
+    var password = documet.getElementById('signup-password').value;
+    var conf_password = documet.getElementById('signup-password-confirm').value;
+    var address = documet.getElementById('searchTextField').value;
+    var borough = document.getElementById('signup-borough').value;
+    if(password == conf_password) {
+      getBBL(address, borough, function(myBBL) {
+        backend_signup(email, password, address, borough, bbl, function(result){
+          console.log("Inject data here");
+        });
+      });
+    }
+  }
+
+  async function getBBL(streetAddress, nycBorough, callback) {
+    const appID = await getAppID();
+    const appKey = await getAppKey();
+    var houseNo = '314';
+    var street = 'Amsterdam Avenue'
+    var formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+houseNo+'&street='+street+'&borough='+nycBorough+'&app_id='+app_id+'&app_key='+appKey;
+    //Use this data to make GET call, and return value of the BBL as a promise
+  }
+
+  function backend_signup(email, password, address, borough, bbl, callback) {
+
   }
 
   function cancelSignIn() {
@@ -86,6 +126,32 @@
     location.href = "forgot"
     //Add password reset call here
   }
+
+  function getAppID() {
+    return new Promise(function(resolve, reject) {
+      //Read private txt file and resolve
+      path = '../apiKeys/nyc-appID.txt'
+      fetch(path)
+        .then(response => response.text())
+        .then(text => resolve(text))
+    });
+  }
+
+  function getAppKey() {
+    return new Promise(function(resolve, reject) {
+      //Read private txt file and resolve
+      path = '../apiKeys/nyc-appKey.txt'
+      fetch(path)
+        .then(response => response.text())
+        .then(text => resolve(text))
+    });
+  }
+
+  function initialize() {
+  var input = document.getElementById('searchTextField');
+  new google.maps.places.Autocomplete(input);
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
   </script>
 
 
