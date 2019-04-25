@@ -50,14 +50,14 @@ def loginUser():
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
-	email = request.form['email']
-	password = request.form['password']
-	hasher = hashlib.sha256()
-	hasher.update(password.encode('utf8'))
-	password = hasher.digest()
+    email = request.form['email']
+    password = request.form['password']
+    hasher = hashlib.sha256()
+    hasher.update(password.encode('utf8'))
+    password = hasher.digest()
     address = request.form['address']
-	result = "true"
-	statusCode = "0"
+    result = "true"
+    statusCode = "0"
 	#Connect to DB and insert, and then change the values of result and status code accordingly
 
     user = mongo.db.users
@@ -66,14 +66,14 @@ def registerUser():
         statusCode = "1"
     else:
         user.insert({'email': email, 'password': password, 'address': address})
-    
-	resultJson = jsonify({"valid" : result, "status":statusCode})
-	'''
-	Status Codes:
-	0 - Sucessful
-	1 - Email ID already exists
-	2 - Unforseen error'''
-	return resultJson
+
+    resultJson = jsonify({"valid" : result, "status" : statusCode})
+    '''
+    Status Codes:
+    0 - Sucessful
+    1 - Email ID already exists
+    2 - Unforseen error'''
+    return resultJson
 
 @app.route('/retrieveAddressList', methods=['POST'])
 def getAddressList():
