@@ -65,7 +65,7 @@ def registerUser():
     if x:
         statusCode = "1"
     else:
-        user.insert({'email': email, 'password': password, 'address', address})
+        user.insert({'email': email, 'password': password, 'address': address})
     
 	resultJson = jsonify({"valid" : result, "status":statusCode})
 	'''
