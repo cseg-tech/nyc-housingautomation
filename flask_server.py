@@ -55,10 +55,18 @@ def registerUser():
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
-	address = request.form['address']
+    address = request.form['address'] #in form of BBL
 	result = "true"
 	statusCode = "0"
 	#Connect to DB and insert, and then change the values of result and status code accordingly
+
+    user = mongo.db.users
+    x = user.find_one({'email' : email})
+    if x:
+        statusCode = "1"
+    else:
+        user.insert({'email': email, 'password': password, 'address', address})
+    
 	resultJson = jsonify({"valid" : result, "status":statusCode})
 	'''
 	Status Codes:
@@ -73,20 +81,20 @@ def getAddressList():
 	return "Placeholder"
 
 @app.route('/getUserStatus', methods=['POST'])
-def getUserStatus(userID):
+def getUserStatus(email):
 #get passed user id -> call getUserAddress to find address,
 #query NYCDB to see other complaints of same address -> return JSON
-	userAddress = getUserAddress(userID)
+	userAddress = getUserAddress(email)
 	complaints = getSameComplaints(userAddress)
 	return "Placeholder"
 
 @app.route('/getUserAddress', methods=['GET'])
-def getUserAddress(id):
+def getUserAddress(email):
     #query MongoDB to find address
-    person = mongo.db.people
-    x = person.find_one({'id' : id})
+    user = mongo.db.users
+    x = user.find_one({'email' : email})
     if x:
-    	output = {'address' : x['address']}
+    	output = x['address']
     else:
     	output = "Does not exist"
     return output
