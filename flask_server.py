@@ -13,6 +13,10 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 
 from flask_pymongo import PyMongo
 
+from apscheduler.schedulers.blocking import BlockingScheduler
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 import hashlib
 
 app = Flask(__name__)
@@ -27,6 +31,44 @@ with open(path, 'r') as myfile:
 	myURI = myfile.read()
 app.config["MONGO_URI"] = myURI
 mongo = PyMongo(app)
+
+def get_sg_key():
+	path = './apiKeys/sendgridKey.txt'
+	myKey = 'noKey'
+	with open(path, 'r') as myfile:
+		myKey = myfile.read()
+	return myKey
+
+def send_email(key, to, content):
+	try:
+		#To be updated with correct email IDs - currently just the demo code
+		message = Mail(from_email='from_email@example.com',to_emails='to@example.com',subject='Sending with Twilio SendGrid is Fun',html_content='<strong>and easy to do anywhere, even with Python</strong>')
+		sg = SendGridAPIClient(key)
+		response = sg.send(message)
+		print(response.status_code)
+		print(response.body)
+		print(response.headers)
+	except Exception as e:
+		print(e.message)
+
+
+sg_key = get_sg_key()
+# Test
+
+def cron_job():
+	# Query each user, find out if anyone else has lodged complaints for thier BBL - if so, email them.
+	emailNeeded = True
+	if(emailNeeded):
+		print("sending...")
+		to = "example@email.com"
+		content = "Hi"
+		send_mail(sg_key, to, content)
+
+scheduler = BlockingScheduler()
+scheduler.add_job(cron_job, 'interval', hours=24)
+scheduler.start()
+#Ref: https://stackoverflow.com/questions/22715086/scheduling-python-script-to-run-every-hour-accurately
+
 
 #Begin Helper Routes
 @app.route('/loginUser', methods=['POST'])
