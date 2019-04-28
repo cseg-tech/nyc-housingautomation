@@ -7,11 +7,12 @@ SETUP:
  - Install needed pip3/pip packages: try running the script to see which ones are needed, 
  	it should just throw an error that says could not find package - that means you need to use pip to get that package
  - export FLASK_APP=flask_server.py
+ - run brew services start mongodb-community@4.0
  - python3 -m flask run (or just flask run, if your default is python3)
 '''
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response, jsonify
 
-from flask_pymongo import PyMongo
+from pymongo import MongoClient
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
@@ -25,12 +26,12 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
-path = './apiKeys/mongoURI.txt'
-myURI = ''
+
+'''path = './apiKeys/mongoURI.txt'
 with open(path, 'r') as myfile:
 	myURI = myfile.read()
 app.config["MONGO_URI"] = myURI
-mongo = PyMongo(app)
+mongo = PyMongo(app)'''
 
 def get_sg_key():
 	path = './apiKeys/sendgridKey.txt'
@@ -55,6 +56,7 @@ def send_email(key, to, content):
 sg_key = get_sg_key()
 # Test
 
+'''
 def cron_job():
 	# Query each user, find out if anyone else has lodged complaints for thier BBL - if so, email them.
 	emailNeeded = True
@@ -66,7 +68,7 @@ def cron_job():
 
 scheduler = BlockingScheduler()
 scheduler.add_job(cron_job, 'interval', hours=24)
-scheduler.start()
+scheduler.start()'''
 #Ref: https://stackoverflow.com/questions/22715086/scheduling-python-script-to-run-every-hour-accurately
 
 
@@ -92,30 +94,34 @@ def loginUser():
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
-    email = request.form['email']
-    password = request.form['password']
-    hasher = hashlib.sha256()
-    hasher.update(password.encode('utf8'))
-    password = hasher.digest()
-    address = request.form['address']
-    result = "true"
-    statusCode = "0"
+	print("Hi!")
+	#email = request.form['email']
+	#password = request.form['password']
+	email = "hello@hello.com"
+	password = "hello"
+	address = "Hi"
+	hasher = hashlib.sha256()
+	hasher.update(password.encode('utf8'))
+	password = hasher.digest()
+	#address = request.form['address']
+	result = "true"
+	statusCode = "0"
+	client = MongoClient('mongodb://localhost:27017')
+	db = client.nycautomation
+
+	#mydict = { "name": "John", "address": "Highway 37" }
+	#x = mycol.insert_one(mydict)
+
 	#Connect to DB and insert, and then change the values of result and status code accordingly
+	user = db.users
+	x = user.find_one({'email' : email})
+	if x:
+		statusCode = "1"
+	else:
+		user.insert_one({'email': email, 'password': password, 'address': address})
 
-    user = mongo.db.users
-    x = user.find_one({'email' : email})
-    if x:
-        statusCode = "1"
-    else:
-        user.insert({'email': email, 'password': password, 'address': address})
-
-    resultJson = jsonify({"valid" : result, "status" : statusCode})
-    '''
-    Status Codes:
-    0 - Sucessful
-    1 - Email ID already exists
-    2 - Unforseen error'''
-    return resultJson
+	resultJson = jsonify({"valid" : result, "status" : statusCode})
+	return resultJson
 
 @app.route('/retrieveAddressList', methods=['POST'])
 def getAddressList():

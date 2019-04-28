@@ -90,7 +90,7 @@
 
   function signUpUser() {
     //Add sign in POST call
-    var email = documet.getElementById('signup-email').value;
+    var emailVar = documet.getElementById('signup-email').value;
     var password = documet.getElementById('signup-password').value;
     var conf_password = documet.getElementById('signup-password-confirm').value;
     var address = documet.getElementById('searchTextField').value;
@@ -98,7 +98,23 @@
     if(password == conf_password) {
       getBBL(address, borough, function(myBBL) {
         backend_signup(email, password, address, borough, bbl, function(result){
-          console.log("Inject data here");
+          const URL = '/registerUser';
+          const data = {
+            email:emailVar,
+            password:password,
+            address:address
+          };
+          const final = {
+            headers = {
+              "content-type":"application/json";
+            },
+            body:data,
+            method:"POST"
+          };
+          fetch(URL, final)
+          .then(data=>{return data.json()})
+          .then(res=>{console.log(res)})
+          .catch(error=>{console.log(error)})
         });
       });
     }
@@ -110,6 +126,8 @@
     var houseNo = '314';
     var street = 'Amsterdam Avenue'
     var formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+houseNo+'&street='+street+'&borough='+nycBorough+'&app_id='+app_id+'&app_key='+appKey;
+    //Insert BBL here
+    return 12334;
     //Use this data to make GET call, and return value of the BBL as a promise
   }
 
