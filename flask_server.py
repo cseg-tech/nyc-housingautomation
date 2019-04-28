@@ -24,6 +24,10 @@ app = Flask(__name__)
 #COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+#connect to local MongoDB
+client = MongoClient('mongodb://localhost:27017')
+db = client.nycautomation
+
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
 
@@ -83,6 +87,19 @@ def loginUser():
 	result = "true"
 	statusCode = "0" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 	#Connect to DB and insert, and then change the values of result and status code accordingly
+    user = db.users
+    
+    x = user.find_one({'email' : email})
+
+    if x:
+        y = x['password']
+        if password == y:
+            statusCode = "0"
+        else:
+            statusCode = "1"
+    else:
+        statusCode = "2"
+        
 	resultJson = jsonify({"valid" : result, "status":statusCode})
 	'''
 	Status Codes:
@@ -106,8 +123,6 @@ def registerUser():
 	#address = request.form['address']
 	result = "true"
 	statusCode = "0"
-	client = MongoClient('mongodb://localhost:27017')
-	db = client.nycautomation
 
 	#mydict = { "name": "John", "address": "Highway 37" }
 	#x = mycol.insert_one(mydict)
