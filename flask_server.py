@@ -16,9 +16,10 @@ from pymongo import MongoClient
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
+import urllib.request
 from sendgrid.helpers.mail import Mail
 
-import hashlib
+import string, random, requests, hashlib
 
 app = Flask(__name__)
 #COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
@@ -39,6 +40,20 @@ mongo = PyMongo(app)'''
 
 def get_sg_key():
 	path = './apiKeys/sendgridKey.txt'
+	myKey = 'noKey'
+	with open(path, 'r') as myfile:
+		myKey = myfile.read()
+	return myKey
+
+def get_nyc_appID():
+	path = './apiKeys/nyc-appID.txt'
+	myKey = 'noKey'
+	with open(path, 'r') as myfile:
+		myKey = myfile.read()
+	return myKey
+
+def get_nyc_appKey():
+	path = './apiKeys/appKey.txt'
 	myKey = 'noKey'
 	with open(path, 'r') as myfile:
 		myKey = myfile.read()
@@ -79,28 +94,29 @@ scheduler.start()'''
 #Begin Helper Routes
 @app.route('/loginUser', methods=['POST'])
 def loginUser():
-	email = request.form['email']
-	password = request.form['password']
+	email = "hello@hello.com"
+	password = "hello"
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
 	result = "true"
-	statusCode = "0" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
-	#Connect to DB and insert, and then change the values of result and status code accordingly
-    user = db.users
-    
-    x = user.find_one({'email' : email})
+	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-    if x:
-        y = x['password']
-        if password == y:
-            statusCode = "0"
-        else:
-            statusCode = "1"
-    else:
-        statusCode = "2"
-        
-	resultJson = jsonify({"valid" : result, "status":statusCode})
+	#Connect to DB and insert, and then change the values of result and status code accordingly
+	user = db.users
+	x = user.find_one({'email' : email})
+	print(x)
+
+	if x:
+		y = x['password']
+		if password == y:
+			statusCode = "0"
+		else:
+			statusCode = "1"
+	else:
+		statusCode = "2"
+
+	resultJson = jsonify({"valid" : result, "status":statusCode, 'id':x['id']})
 	'''
 	Status Codes:
 	0 - Sucessful
@@ -117,12 +133,16 @@ def registerUser():
 	email = "hello@hello.com"
 	password = "hello"
 	address = "Hi"
+	bbl = 12345
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
 	#address = request.form['address']
 	result = "true"
 	statusCode = "0"
+	#id_hasher = hashlib.sha256()
+	#id_hasher.update(.encode('utf8'))
+	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
 	#mydict = { "name": "John", "address": "Highway 37" }
 	#x = mycol.insert_one(mydict)
@@ -131,42 +151,42 @@ def registerUser():
 	user = db.users
 	x = user.find_one({'email' : email})
 	if x:
-		statusCode = "1"
+		statusCode = "0"
 	else:
-		user.insert_one({'email': email, 'password': password, 'address': address})
+		user.insert_one({'email': email, 'password': password, 'address': address, 'id': identifier, 'bbl':bbl})
 
 	resultJson = jsonify({"valid" : result, "status" : statusCode})
 	return resultJson
-
-@app.route('/retrieveAddressList', methods=['POST'])
-def getAddressList():
-	#Retrieve a list of addresses for user suggestions
-	return "Placeholder"
 
 @app.route('/getUserStatus', methods=['POST'])
 def getUserStatus(email):
 #get passed user id -> call getUserAddress to find address,
 #query NYCDB to see other complaints of same address -> return JSON
-	userAddress = getUserAddress(email)
-	complaints = getSameComplaints(userAddress)
-	return "Placeholder"
-
-@app.route('/getUserAddress', methods=['GET'])
-def getUserAddress(email):
-    #query MongoDB to find address
-    user = mongo.db.users
-    x = user.find_one({'email' : email})
-    if x:
-    	output = x['address']
-    else:
-    	output = "Does not exist"
-    return output
+	user_id = request.form['id']
+	complaints = getSameComplaints(user_id)
+	return complaints
 
 @app.route('/resetUserPassword', methods=['POST'])
 def resetPassword():
 	email = request.form['email']
 	statusCode = "0"
 	return {"status" : statusCode}
+
+@app.route('/getBBL', methods=['POST'])
+def getBBL():
+	appID = get_nyc_appID()
+	appKey = get_nyc_appKey()
+	houseNo = request.form['house']
+	street = request.form['street']
+	nycBorough = request.form['borough']
+	myBBL = 000000
+	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+houseNo+'&street='+street+'&borough='+nycBorough+'&app_id='+appID+'&app_key='+appKey;
+	contents = urllib.request.urlopen(formatString).read()
+	result = {
+		"bbl":contents
+	}
+	return jsonify(result)
+
 #endregion
 
 #Begin page-serve routes
@@ -186,8 +206,11 @@ def serveSignUp():
 
 @app.route('/mainpage', methods=['GET'])
 def serveMainPage():
+	user = request.args.get('UID')
+	address = getAddress(user)
+	complaints = getUIDComplaints(user)
 	getMyURL=getURL()
-	return render_template('/mainpage.html',myKeyURL=getMyURL)
+	return render_template('/mainpage.html',myKeyURL=getMyURL, address=address, complaints=complaints)
 
 @app.route('/forgot', methods=['GET'])
 def serveForgot():
@@ -207,5 +230,17 @@ def getURL():
 	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
 	return apiString
 
-def getSameComplaints(userAddress):
-	return None;
+def getUIDComplaints(user_id):
+	user = db.users
+	x = user.find({'id' : user_id})
+	resultJson = {}
+	if x:
+		bbl = x['bbl']
+		resultJson = findAllComplaints(bbl)
+	return jsonify(resultJson)
+
+def findAllComplaints(bbl):
+	# Connect to NYCDB and get all complaints with that address
+	return None
+
+	

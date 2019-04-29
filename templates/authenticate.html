@@ -84,55 +84,110 @@
 
   function signInUser() {
     //Add sign in POST call
-    location = "mainpage";
+    var emailVar = document.getElementById('signup-email').value;
+    var password = document.getElementById('signup-password').value;
+    frontendLogin(emailVar, password, function (result, statusCode, uniqueID) {
+        if(result) {
+          location = "mainpage?UID="+uniqueID;
+        } else {
+          console.log(statusCode);//Handle error and display
+        }
+    })
+
     return false;
   }
 
-  function signUpUser() {
-    //Add sign in POST call
-    var emailVar = documet.getElementById('signup-email').value;
-    var password = documet.getElementById('signup-password').value;
-    var conf_password = documet.getElementById('signup-password-confirm').value;
-    var address = documet.getElementById('searchTextField').value;
-    var borough = document.getElementById('signup-borough').value;
-    if(password == conf_password) {
-      getBBL(address, borough, function(myBBL) {
-        backend_signup(email, password, address, borough, bbl, function(result){
-          const URL = '/registerUser';
+  function frontendLogin(email,password, callback) {
+    const URL = '/loginUser';
           const data = {
-            email:emailVar,
+            email:email,
             password:password,
-            address:address
           };
           const final = {
-            headers = {
-              "content-type":"application/json";
+            headers: {
+              "content-type":"application/json"
             },
             body:data,
             method:"POST"
           };
+          console.log("Signing In...")
           fetch(URL, final)
           .then(data=>{return data.json()})
-          .then(res=>{console.log(res)})
+          .then(res=>{callback(res['valid'], res['status'], res['id'])})
           .catch(error=>{console.log(error)})
+  }
+
+  function signUpUser() {
+    console.log("Registering... 1")
+    //Add sign in POST call
+    var emailVar = document.getElementById('signup-email').value;
+    var password = document.getElementById('signup-password').value;
+    var conf_password = document.getElementById('signup-password-confirm').value;
+    var address = document.getElementById('searchTextField').value;
+    var borough = document.getElementById('signup-borough').value;
+    if(password == conf_password) {
+      getBBL(address, borough, function(myBBL) {
+        backend_signup(emailVar, password, address, borough, myBBL, function(result) {
+          status = result['status']
+          valid = result['valid']
+          if(!valid) {
+            console.log(status)
+            //Handle invalid here
+          }
         });
       });
+    } else {
+      console.log("Different Passwords");
     }
   }
 
-  async function getBBL(streetAddress, nycBorough, callback) {
-    const appID = await getAppID();
-    const appKey = await getAppKey();
-    var houseNo = '314';
-    var street = 'Amsterdam Avenue'
-    var formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+houseNo+'&street='+street+'&borough='+nycBorough+'&app_id='+app_id+'&app_key='+appKey;
+  function getBBL(streetAddress, nycBorough, callback) {
+    console.log("here");
+    //const appID = await getAppID();
+    //const appKey = await getAppKey();
+    houseNo = streetAddress;
+    street = streetAddress;
+    const URL = '/getBBL';
+          const data = {
+            house:houseNo,
+            street:street,
+            borogh:nycBorough
+          };
+          const final = {
+            headers: {
+              "content-type":"application/json"
+            },
+            body:data,
+            method:"POST"
+          };
+          console.log("Getting BBL...")
+          fetch(URL, final)
+          .then(data=>{return data.json()})
+          .then(res=>{callback(res['bbl'])})
+          .catch(error=>{console.log(error)})
     //Insert BBL here
-    return 12334;
     //Use this data to make GET call, and return value of the BBL as a promise
   }
 
   function backend_signup(email, password, address, borough, bbl, callback) {
-
+    const URL = '/registerUser';
+          const data = {
+            email:email,
+            password:password,
+            address:address
+          };
+          const final = {
+            headers: {
+              "content-type":"application/json"
+            },
+            body:data,
+            method:"POST"
+          };
+          console.log("Registering...")
+          fetch(URL, final)
+          .then(data=>{return data.json()})
+          .then(res=>{callback(res)})
+          .catch(error=>{console.log(error)})
   }
 
   function cancelSignIn() {
