@@ -17,6 +17,7 @@ from pymongo import MongoClient
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
 import urllib.request
+
 from sendgrid.helpers.mail import Mail
 
 import string, random, requests, hashlib
@@ -240,6 +241,10 @@ def getUIDComplaints(user_id):
 	return jsonify(resultJson)
 
 def findAllComplaints(bbl):
+	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json"
+	contents = urllib.request.urlopen(url).read()
+	complaints = jsonify(contents)
+	print(complaints)
 	# Connect to NYCDB and get all complaints with that address
 	return None
 
