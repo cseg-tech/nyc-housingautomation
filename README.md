@@ -33,7 +33,7 @@ Additional account functionality:
 - **View recent complaint activity.** Create a basic summary of the complaint and violation histories for the selected building(s) and categories.
 - **Facilitate the filing of 311 complaints.** Prompt users about filing 311 complaints for the issues they are monitoring. Display complaint history in the selected building(s) for categories not selected (e.g. “Others in your building have reported X, Y, Z issues, as well. Are you experiencing these issues?”).
 - **NYCHA residents.** Identify NYCHA addresses and refer user to MyNYCHA.
-- **Right to Counsel** Identify potential RTC eligibility by zip code and refer user to info about RTC.
+- **Right to Counsel.** Identify potential RTC eligibility by zip code and refer user to info about RTC.
 - **Link to other resources.** E.g. JustFix.nyc, Heat Seek, Legal Aid Society, etc.
 
 Additional alert mediums:
