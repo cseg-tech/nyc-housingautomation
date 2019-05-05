@@ -13,6 +13,7 @@ SETUP:
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response, jsonify
 
 from pymongo import MongoClient
+import requests
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
@@ -97,8 +98,10 @@ scheduler.start()'''
 #Begin Helper Routes
 @app.route('/loginUser', methods=['POST'])
 def loginUser():
-	email = "hello@hello.com"
-	password = "hello"
+	email = request.form['email']
+	password = request.form['password']
+	print(email)
+	print(password)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
@@ -109,8 +112,9 @@ def loginUser():
 	user = db.users
 	x = user.find_one({'email' : email})
 	print(x)
-
+	id_save = 00000
 	if x:
+		id_save = x['id']
 		y = x['password']
 		if password == y:
 			statusCode = "0"
@@ -118,8 +122,8 @@ def loginUser():
 			statusCode = "1"
 	else:
 		statusCode = "2"
-
-	resultJson = jsonify({"valid" : result, "status":statusCode, 'id':x['id']})
+	resultJson = jsonify({"valid" : result, "status":statusCode, 'id':id_save})
+	print(resultJson)
 	'''
 	Status Codes:
 	0 - Sucessful
@@ -130,17 +134,17 @@ def loginUser():
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
-	print("Hi!")
-	#email = request.form['email']
-	#password = request.form['password']
-	email = "hello@hello.com"
-	password = "hello"
-	address = "Hi"
-	bbl = 12345
+	email = request.form['email']
+	password = request.form['password']
+	building = request.form['building']
+	street = request.form['street']
+	address = building+" "+street
+	borough = request.form['borough']
+	print(email)
+	bbl = getBBL(building,street,borough)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
-	#address = request.form['address']
 	result = "true"
 	statusCode = "0"
 	#id_hasher = hashlib.sha256()
@@ -175,20 +179,15 @@ def resetPassword():
 	statusCode = "0"
 	return {"status" : statusCode}
 
-@app.route('/getBBL', methods=['POST'])
-def getBBL():
+def getBBL(building, street, borough):
 	appID = get_nyc_appID()
 	appKey = get_nyc_appKey()
-	houseNo = request.form['house']
-	street = request.form['street']
-	nycBorough = request.form['borough']
-	myBBL = 000000
-	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+houseNo+'&street='+street+'&borough='+nycBorough+'&app_id='+appID+'&app_key='+appKey;
-	contents = urllib.request.urlopen(formatString).read()
-	result = {
-		"bbl":contents
-	}
-	return jsonify(result)
+	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+building+'&street='+street+'&borough='+borough+'&app_id='+appID+'&app_key='+appKey;
+	print(formatString)
+	resp = requests.get(url=formatString)
+	data = resp.json() # Check the JSON Response Content documentation below
+	print(data['address']['bbl'])
+	return (data['address']['bbl'])
 
 #endregion
 
@@ -212,9 +211,11 @@ def serveMainPage():
 	user = request.args.get('UID')
 	address = getAddress(user)
 	complaints = getUIDComplaints(user)
-	print(complaints)
+	open_complaints = json.dumps(complaints[0])
+	closed_complaints = json.dumps(complaints[1])
+	number = complaints[2]
 	getMyURL=getURL()
-	return render_template('/mainpage.html',myKeyURL=getMyURL, address=address, complaints=complaints)
+	return render_template('/mainpage.html',myKeyURL=getMyURL, address=address, open=open_complaints, closed=closed_complaints, number=number)
 
 @app.route('/forgot', methods=['GET'])
 def serveForgot():
@@ -249,15 +250,42 @@ def getAddress(UID):
 	x = user.find_one({'id' : UID})
 	return x['address']
 
+def get_dataToken():
+	path = './apiKeys/dataToken.txt'
+	myKey = 'noKey'
+	with open(path, 'r') as myfile:
+		myKey = myfile.read()
+	return myKey
+
+def cleanComplaints(complaintData):
+	open_complaints = []
+	closed_complaints = []
+	for complaint in complaintData:
+		print("Getting")
+		fresh = {}
+		try:
+			fresh['Date_Created'] = complaint['created_date']
+		except:
+			fresh['Date_Created'] = "N/A"
+		try:
+			fresh['Updated_On'] = complaint['resolution_action_updated_date']
+		except:
+			fresh['Updated_On'] = "N/A"
+		try:
+			fresh['Description'] = complaint['resolution_description']
+		except:
+			fresh['Description'] = "N/A"
+		if(complaint['status'] == 'Closed'):
+			closed_complaints.append(fresh)
+		else:
+			open_complaints.append(fresh)
+	return [open_complaints, closed_complaints, len(open_complaints)+len(closed_complaints)]
+
 def findAllComplaints(bbl):
-	print('Here')
-	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json"
-	#contents = (urllib.request.urlopen(url).read())
+	token = get_dataToken()
+	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
 	r = urllib.request.urlopen(url)
 	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
-	#relevant_complaints = [x for x in data if x['bbl'] == bbl]
-	#print(data[1])
-	# Connect to NYCDB and get all complaints with that address
-	return data
+	return cleanComplaints(data)
 
 	

@@ -43,8 +43,12 @@
             <input id="signup-email" type="email" required>
           </div>
           <div class="input-block">
-            <label for="searchTextField">Address</label>
-            <input id="searchTextField" type="text" required="">
+            <label for="buildingNo">House Number</label>
+            <input id="buildingNo" type="text" required="">
+          </div>
+          <div class="input-block">
+            <label for="streetNo">Street Name</label>
+            <input id="streetNo" type="text" required="">
           </div>
           <div class="input-block">
             <label for="signup-borough">Borough</label>
@@ -84,37 +88,29 @@
 
   function signInUser() {
     //Add sign in POST call
-    var emailVar = document.getElementById('signup-email').value;
-    var password = document.getElementById('signup-password').value;
-    frontendLogin(emailVar, password, function (result, statusCode, uniqueID) {
+    var emailVar = document.getElementById('login-email').value;
+    var password = document.getElementById('login-password').value;
+    frontendLogin(emailVar, password, function (data) {
+        const obj = JSON.parse(data)
+        const result = obj['valid']
+        const uniqueID = obj['id']
+        const statusCode = obj['status']
+        console.log(typeof obj)
+        console.log(obj)
         if(result) {
           location = "mainpage?UID="+uniqueID;
         } else {
-          console.log(statusCode);//Handle error and display
+          console.log("ERROR"+statusCode);//Handle error and display
         }
     })
 
     return false;
   }
 
-  function frontendLogin(email,password, callback) {
-    const URL = '/loginUser';
-          const data = {
-            email:email,
-            password:password,
-          };
-          const final = {
-            headers: {
-              "content-type":"application/json"
-            },
-            body:data,
-            method:"POST"
-          };
-          console.log("Signing In...")
-          fetch(URL, final)
-          .then(data=>{return data.json()})
-          .then(res=>{callback(res['valid'], res['status'], res['id'])})
-          .catch(error=>{console.log(error)})
+  function frontendLogin(mail,pass,callback) {
+    postAjax('/loginUser', {email:mail,password:pass}, function(data){
+        callback(data);
+      });   
   }
 
   function signUpUser() {
@@ -123,72 +119,45 @@
     var emailVar = document.getElementById('signup-email').value;
     var password = document.getElementById('signup-password').value;
     var conf_password = document.getElementById('signup-password-confirm').value;
-    var address = document.getElementById('searchTextField').value;
+    var houseNo = document.getElementById('buildingNo').value;
+    var streetNo = document.getElementById('streetNo').value;
     var borough = document.getElementById('signup-borough').value;
     if(password == conf_password) {
-      getBBL(address, borough, function(myBBL) {
-        backend_signup(emailVar, password, address, borough, myBBL, function(result) {
-          status = result['status']
-          valid = result['valid']
-          if(!valid) {
-            console.log(status)
-            //Handle invalid here
-          }
-        });
+      backend_signup(emailVar, password, houseNo, streetNo, borough, function(result) {
+        const data = JSON.parse(result)
+        status = data['status']
+        valid = data['valid']
+        if(!valid) {
+          console.log(status)
+          //Handle invalid here
+        }
       });
-    } else {
-      console.log("Different Passwords");
-    }
+  } else {
+    console.log("Different Passwords");
+  }
+}
+
+  function backend_signup(mail, pass, house, str, bor, callback) {
+      postAjax('/registerUser', {email:mail, password:pass,building:house,street:str,borough:bor}, function(data){
+        callback(data);
+      });
   }
 
-  function getBBL(streetAddress, nycBorough, callback) {
-    console.log("here");
-    //const appID = await getAppID();
-    //const appKey = await getAppKey();
-    houseNo = streetAddress;
-    street = streetAddress;
-    const URL = '/getBBL';
-          const data = {
-            house:houseNo,
-            street:street,
-            borogh:nycBorough
-          };
-          const final = {
-            headers: {
-              "content-type":"application/json"
-            },
-            body:data,
-            method:"POST"
-          };
-          console.log("Getting BBL...")
-          fetch(URL, final)
-          .then(data=>{return data.json()})
-          .then(res=>{callback(res['bbl'])})
-          .catch(error=>{console.log(error)})
-    //Insert BBL here
-    //Use this data to make GET call, and return value of the BBL as a promise
-  }
+  function postAjax(url, data, success) {
+    var params = typeof data == 'string' ? data : Object.keys(data).map(
+            function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
+        ).join('&');
 
-  function backend_signup(email, password, address, borough, bbl, callback) {
-    const URL = '/registerUser';
-          const data = {
-            email:email,
-            password:password,
-            address:address
-          };
-          const final = {
-            headers: {
-              "content-type":"application/json"
-            },
-            body:data,
-            method:"POST"
-          };
-          console.log("Registering...")
-          fetch(URL, final)
-          .then(data=>{return data.json()})
-          .then(res=>{callback(res)})
-          .catch(error=>{console.log(error)})
-  }
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+    xhr.open('POST', url);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState>3 && xhr.status==200) { success(xhr.responseText); }
+    };
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(params);
+    return xhr;
+}
 
   function cancelSignIn() {
     location.href = "/"
@@ -220,11 +189,11 @@
     });
   }
 
-  function initialize() {
+  /*function initialize() {
   var input = document.getElementById('searchTextField');
   new google.maps.places.Autocomplete(input);
   }
-  google.maps.event.addDomListener(window, 'load', initialize);
+  google.maps.event.addDomListener(window, 'load', initialize);*/
   </script>
 
 
