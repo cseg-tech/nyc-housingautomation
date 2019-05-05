@@ -261,7 +261,6 @@ def cleanComplaints(complaintData):
 	open_complaints = []
 	closed_complaints = []
 	for complaint in complaintData:
-		print("Getting")
 		fresh = {}
 		try:
 			fresh['Date_Created'] = complaint['created_date']
