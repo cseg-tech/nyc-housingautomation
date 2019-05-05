@@ -20,6 +20,8 @@ import urllib.request
 
 from sendgrid.helpers.mail import Mail
 
+import json
+
 import string, random, requests, hashlib
 
 app = Flask(__name__)
@@ -210,6 +212,7 @@ def serveMainPage():
 	user = request.args.get('UID')
 	address = getAddress(user)
 	complaints = getUIDComplaints(user)
+	print(complaints)
 	getMyURL=getURL()
 	return render_template('/mainpage.html',myKeyURL=getMyURL, address=address, complaints=complaints)
 
@@ -233,19 +236,28 @@ def getURL():
 
 def getUIDComplaints(user_id):
 	user = db.users
-	x = user.find({'id' : user_id})
-	resultJson = {}
+	x = user.find_one({'id' : user_id})
 	if x:
 		bbl = x['bbl']
-		resultJson = findAllComplaints(bbl)
-	return jsonify(resultJson)
+		result = findAllComplaints(bbl)
+		return result
+	return "No Complaints Found"
+
+def getAddress(UID):
+	#Connect to DB and insert, and then change the values of result and status code accordingly
+	user = db.users
+	x = user.find_one({'id' : UID})
+	return x['address']
 
 def findAllComplaints(bbl):
+	print('Here')
 	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json"
-	contents = urllib.request.urlopen(url).read()
-	complaints = jsonify(contents)
-	print(complaints)
+	#contents = (urllib.request.urlopen(url).read())
+	r = urllib.request.urlopen(url)
+	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
+	#relevant_complaints = [x for x in data if x['bbl'] == bbl]
+	#print(data[1])
 	# Connect to NYCDB and get all complaints with that address
-	return None
+	return data
 
 	
