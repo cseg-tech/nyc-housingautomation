@@ -1,29 +1,15 @@
-#!/usr/bin/python3.7
-#region --Import Packages--
-
-'''
-SETUP:
- - Navigate to project directory on terminal, ensure that depeendancies are installed
- - Install needed pip3/pip packages: try running the script to see which ones are needed, 
- 	it should just throw an error that says could not find package - that means you need to use pip to get that package
- - export FLASK_APP=flask_server.py
- - run brew services start mongodb-community@4.0
- - python3 -m flask run (or just flask run, if your default is python3)
-'''
+# Begin default packages
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response, jsonify
-
-from pymongo import MongoClient
 import requests
+import urllib
+import json
+import string, random, requests, hashlib
 
+# Custom packages
+from sendgrid.helpers.mail import Mail
+from pymongo import MongoClient
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
-import urllib.request
-
-from sendgrid.helpers.mail import Mail
-
-import json
-
-import string, random, requests, hashlib
 
 app = Flask(__name__)
 #COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
@@ -283,7 +269,7 @@ def cleanComplaints(complaintData):
 def findAllComplaints(bbl):
 	token = get_dataToken()
 	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
-	r = urllib.request.urlopen(url)
+	r = urllib.urlopen(url)
 	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
 	return cleanComplaints(data)
 

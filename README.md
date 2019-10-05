@@ -1,6 +1,15 @@
 # NYC Housing Complaint Alert System
 A notification system that alerts NYC tenants, tenant organizers, and other users who sign up for the service whenever a housing complaint is filed in their building.
 
+## Technical Information:
+### Setup:
+ - Navigate to project directory on terminal, ensure that dependancies are installed
+ - Setup a virtual environment using virtualenv venv. Download virtualenv <a href="https://www.andreagrandi.it/2018/12/19/installing-python-and-virtualenv-on-osx/">here</a>
+ - Install the required packages from requirements.txt into your venv
+ - Run ```export FLASK_APP=flask_server.py```
+ - Ensure that your MongoDB instance is active
+ - flask run
+
 ## Overview
 ### Use Cases
 - **Tenants** can use the tool to coordinate with other tenants, gather supporting evidence for housing court proceedings, or generally be informed of the complaints being filed in their building.
