@@ -1,11 +1,3 @@
-'''
-	TODO:
-		- All MongoDB functions into MongoHelper.py
-		- All get key functions into KeyHelper.py
-		- All communication functions (Email, SMS) into Communications.py
-		- All NYCDB functions into NYCDBWrapper.py
-'''
-
 # Begin default packages
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, Response, jsonify
 import requests
