@@ -6,9 +6,8 @@ A notification system that alerts NYC tenants, tenant organizers, and other user
  - Navigate to project directory on terminal, ensure that dependancies are installed
  - Setup a virtual environment using virtualenv venv. Download virtualenv <a href="https://www.andreagrandi.it/2018/12/19/installing-python-and-virtualenv-on-osx/">here</a>
  - Install the required packages from requirements.txt into your venv
- - Run ```export FLASK_APP=flask_server.py```
  - Ensure that your MongoDB instance is active
- - flask run
+ - Run ```export FLASK_APP=flask_server.py | flask run```
 
 ## Overview
 ### Use Cases
