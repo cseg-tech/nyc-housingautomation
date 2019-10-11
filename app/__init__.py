@@ -29,21 +29,21 @@ app.config["MONGO_URI"] = myURI
 mongo = PyMongo(app)'''
 
 def get_sg_key():
-	path = './apiKeys/sendgridKey.txt'
+	path = 'apiKeys/sendgridKey.txt'
 	myKey = 'noKey'
 	with open(path, 'r') as myfile:
 		myKey = myfile.read()
 	return myKey
 
 def get_nyc_appID():
-	path = './apiKeys/nyc-appID.txt'
+	path = 'apiKeys/nyc-appID.txt'
 	myKey = 'noKey'
 	with open(path, 'r') as myfile:
 		myKey = myfile.read()
 	return myKey
 
 def get_nyc_appKey():
-	path = './apiKeys/appKey.txt'
+	path = 'apiKeys/appKey.txt'
 	myKey = 'noKey'
 	with open(path, 'r') as myfile:
 		myKey = myfile.read()
@@ -61,11 +61,9 @@ def send_email(key, to, content):
 	except Exception as e:
 		print(e.message)
 
-
-sg_key = get_sg_key()
-# Test
-
 '''
+sg_key = get_sg_key()
+
 def cron_job():
 	# Query each user, find out if anyone else has lodged complaints for thier BBL - if so, email them.
 	emailNeeded = True
@@ -272,5 +270,3 @@ def findAllComplaints(bbl):
 	r = urllib.urlopen(url)
 	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
 	return cleanComplaints(data)
-
-	
