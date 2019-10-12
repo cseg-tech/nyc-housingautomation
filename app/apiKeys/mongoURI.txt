@@ -1,1 +1,0 @@
-mongodb+srv://chris:cseg1234%21@cluster1-smxun.mongodb.net/test?retryWrites=true

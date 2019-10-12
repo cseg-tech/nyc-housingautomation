@@ -1,6 +1,6 @@
 /node-modules
 /__pycache__
 .DS_STORE
-/apiKeys
+app/apiKeys/
 venv/
 *pyc
