@@ -15,7 +15,7 @@ class AutomationTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-	# Begin tests here
+    # Begin tests here
 
     # Begin test to check main page response
     def test_main_page(self):
