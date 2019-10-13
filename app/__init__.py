@@ -11,13 +11,13 @@ from pymongo import MongoClient
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
 
+import modules.MongoHelper as MDBHelper
+
 app = Flask(__name__)
 #COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-#connect to local MongoDB
-client = MongoClient('mongodb://localhost:27017')
-db = client.nycautomation
+db = MDBHelper.init_Mongo()
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -80,21 +80,8 @@ def loginUser():
 	result = "true"
 	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-	#Connect to DB and insert, and then change the values of result and status code accordingly
-	user = db.users
-	x = user.find_one({'email' : email})
-	print(x)
-	id_save = 00000
-	if x:
-		id_save = x['id']
-		y = x['password']
-		if password == y:
-			statusCode = "0"
-		else:
-			statusCode = "1"
-	else:
-		statusCode = "2"
-	resultJson = jsonify({"valid" : result, "status":statusCode, 'id':id_save})
+    resultJson = MDBHelper.DB_login_user(db, email, password, statusCode)
+    
 	print(resultJson)
 	'''
 	Status Codes:
@@ -122,19 +109,9 @@ def registerUser():
 	#id_hasher = hashlib.sha256()
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-
-	#mydict = { "name": "John", "address": "Highway 37" }
-	#x = mycol.insert_one(mydict)
-
-	#Connect to DB and insert, and then change the values of result and status code accordingly
-	user = db.users
-	x = user.find_one({'email' : email})
-	if x:
-		statusCode = "0"
-	else:
-		user.insert_one({'email': email, 'password': password, 'address': address, 'id': identifier, 'bbl':bbl})
-
-	resultJson = jsonify({"valid" : result, "status" : statusCode})
+    
+    resultJson = MDBHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
+    
 	return resultJson
 
 @app.route('/getUserStatus', methods=['POST'])
@@ -181,8 +158,8 @@ def serveSignUp():
 @app.route('/mainpage', methods=['GET'])
 def serveMainPage():
 	user = request.args.get('UID')
-	address = getAddress(user)
-	complaints = getUIDComplaints(user)
+	address = MDBHelper.getAddress(db, user)
+	complaints = MDBHelper.getUIDComplaints(db, user)
 	open_complaints = json.dumps(complaints[0])
 	closed_complaints = json.dumps(complaints[1])
 	number = complaints[2]
@@ -207,54 +184,9 @@ def getURL():
 	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
 	return apiString
 
-def getUIDComplaints(user_id):
-	user = db.users
-	x = user.find_one({'id' : user_id})
-	if x:
-		bbl = x['bbl']
-		result = findAllComplaints(bbl)
-		return result
-	return "No Complaints Found"
-
-def getAddress(UID):
-	#Connect to DB and insert, and then change the values of result and status code accordingly
-	user = db.users
-	x = user.find_one({'id' : UID})
-	return x['address']
-
 def get_dataToken():
 	path = './apiKeys/dataToken.txt'
 	myKey = 'noKey'
 	with open(path, 'r') as myfile:
 		myKey = myfile.read()
 	return myKey
-
-def cleanComplaints(complaintData):
-	open_complaints = []
-	closed_complaints = []
-	for complaint in complaintData:
-		fresh = {}
-		try:
-			fresh['Date_Created'] = complaint['created_date']
-		except:
-			fresh['Date_Created'] = "N/A"
-		try:
-			fresh['Updated_On'] = complaint['resolution_action_updated_date']
-		except:
-			fresh['Updated_On'] = "N/A"
-		try:
-			fresh['Description'] = complaint['resolution_description']
-		except:
-			fresh['Description'] = "N/A"
-		if(complaint['status'] == 'Closed'):
-			closed_complaints.append(fresh)
-		else:
-			open_complaints.append(fresh)
-	return [open_complaints, closed_complaints, len(open_complaints)+len(closed_complaints)]
-
-def findAllComplaints(bbl):
-	token = get_dataToken()
-	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
-	r = urllib.urlopen(url)
-	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
-	return cleanComplaints(data)
