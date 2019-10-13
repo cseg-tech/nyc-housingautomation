@@ -4,6 +4,7 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
+import modules.NYCDBWrapper as NYCDBWrapper
 
 # Custom packages
 from sendgrid.helpers.mail import Mail
@@ -35,19 +36,7 @@ def get_sg_key():
 		myKey = myfile.read()
 	return myKey
 
-def get_nyc_appID():
-	path = 'apiKeys/nyc-appID.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
 
-def get_nyc_appKey():
-	path = 'apiKeys/appKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
 
 '''
 sg_key = get_sg_key()
@@ -100,7 +89,7 @@ def registerUser():
 	address = building+" "+street
 	borough = request.form['borough']
 	print(email)
-	bbl = getBBL(building,street,borough)
+	bbl = NYCDBWrapper.getBBL(building,street,borough)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
@@ -119,7 +108,7 @@ def getUserStatus(email):
 #get passed user id -> call getUserAddress to find address,
 #query NYCDB to see other complaints of same address -> return JSON
 	user_id = request.form['id']
-	complaints = getSameComplaints(user_id)
+	complaints = NYCDBWrapper.getSameComplaints(user_id)
 	return complaints
 
 @app.route('/resetUserPassword', methods=['POST'])
@@ -128,15 +117,7 @@ def resetPassword():
 	statusCode = "0"
 	return {"status" : statusCode}
 
-def getBBL(building, street, borough):
-	appID = get_nyc_appID()
-	appKey = get_nyc_appKey()
-	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+building+'&street='+street+'&borough='+borough+'&app_id='+appID+'&app_key='+appKey;
-	print(formatString)
-	resp = requests.get(url=formatString)
-	data = resp.json() # Check the JSON Response Content documentation below
-	print(data['address']['bbl'])
-	return (data['address']['bbl'])
+
 
 #endregion
 
@@ -183,10 +164,3 @@ def getURL():
 		myKey = myfile.read()
 	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
 	return apiString
-
-def get_dataToken():
-	path = './apiKeys/dataToken.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
