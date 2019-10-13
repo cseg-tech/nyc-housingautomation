@@ -49,18 +49,6 @@ def get_nyc_appKey():
 		myKey = myfile.read()
 	return myKey
 
-def send_email(key, to, content):
-	try:
-		#To be updated with correct email IDs - currently just the demo code
-		message = Mail(from_email='from_email@example.com',to_emails='to@example.com',subject='Sending with Twilio SendGrid is Fun',html_content='<strong>and easy to do anywhere, even with Python</strong>')
-		sg = SendGridAPIClient(key)
-		response = sg.send(message)
-		print(response.status_code)
-		print(response.body)
-		print(response.headers)
-	except Exception as e:
-		print(e.message)
-
 '''
 sg_key = get_sg_key()
 
