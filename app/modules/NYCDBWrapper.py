@@ -2,19 +2,7 @@ import json
 import urllib
 import requests
 
-def get_nyc_appID():
-	path = 'apiKeys/nyc-appID.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
-
-def get_nyc_appKey():
-	path = 'apiKeys/appKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
+from ..modules import Credential as Credential
 
 def cleanComplaints(complaintData):
 	open_complaints = []
@@ -55,8 +43,8 @@ def get_dataToken():
 	return myKey
 
 def getBBL(building, street, borough):
-	appID = get_nyc_appID()
-	appKey = get_nyc_appKey()
+	appID = Credential.get_nyc_appID()
+	appKey = Credential.get_nyc_appKey()
 	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+building+'&street='+street+'&borough='+borough+'&app_id='+appID+'&app_key='+appKey;
 	print(formatString)
 	resp = requests.get(url=formatString)

@@ -15,6 +15,8 @@ from sendgrid import SendGridAPIClient
 from .modules import MongoHelper
 from .modules import NYCDBWrapper
 from .modules import Communications
+from .modules import Credential
+
 
 app = Flask(__name__)
 # COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
@@ -41,7 +43,7 @@ def get_sg_key():
 
 
 '''
-sg_key = get_sg_key()
+sg_key = Credential.get_sg_key()
 
 def cron_job():
 	# Query each user, find out if anyone else has lodged complaints for thier BBL - if so, email them.
