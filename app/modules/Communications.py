@@ -9,10 +9,6 @@ import string, random, requests, hashlib
 from sendgrid import SendGridAPIClient
 
 
-
-
-
-
 def send_email(key, to, content):
 	try:
 		#To be updated with correct email IDs - currently just the demo code

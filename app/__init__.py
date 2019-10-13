@@ -4,21 +4,23 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
-import modules.NYCDBWrapper as NYCDBWrapper
 
-# Custom packages
+# Imported packages
 from sendgrid.helpers.mail import Mail
 from pymongo import MongoClient
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
 
-import modules.MongoHelper as MDBHelper
+# Custom modules
+from .modules import MongoHelper
+from .modules import NYCDBWrapper
+from .modules import Communications
 
 app = Flask(__name__)
-#COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
+# COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-db = MDBHelper.init_Mongo()
+db = MongoHelper.init_Mongo()
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -69,7 +71,7 @@ def loginUser():
 	result = "true"
 	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-    resultJson = MDBHelper.DB_login_user(db, email, password, statusCode)
+	resultJson = MongoHelper.DB_login_user(db, email, password, statusCode)
     
 	print(resultJson)
 	'''
@@ -98,8 +100,8 @@ def registerUser():
 	#id_hasher = hashlib.sha256()
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-    
-    resultJson = MDBHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
+
+	resultJson = MongoHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
     
 	return resultJson
 
@@ -139,8 +141,8 @@ def serveSignUp():
 @app.route('/mainpage', methods=['GET'])
 def serveMainPage():
 	user = request.args.get('UID')
-	address = MDBHelper.getAddress(db, user)
-	complaints = MDBHelper.getUIDComplaints(db, user)
+	address = MongoHelper.getAddress(db, user)
+	complaints = MongoHelper.getUIDComplaints(db, user)
 	open_complaints = json.dumps(complaints[0])
 	closed_complaints = json.dumps(complaints[1])
 	number = complaints[2]
