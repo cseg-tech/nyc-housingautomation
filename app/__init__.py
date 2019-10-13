@@ -4,6 +4,7 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
+import modules.NYCDBWrapper as NYCDBWrapper
 
 # Custom packages
 from sendgrid.helpers.mail import Mail
@@ -35,19 +36,7 @@ def get_sg_key():
 		myKey = myfile.read()
 	return myKey
 
-def get_nyc_appID():
-	path = 'apiKeys/nyc-appID.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
 
-def get_nyc_appKey():
-	path = 'apiKeys/appKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
 
 '''
 sg_key = get_sg_key()
@@ -113,7 +102,7 @@ def registerUser():
 	address = building+" "+street
 	borough = request.form['borough']
 	print(email)
-	bbl = getBBL(building,street,borough)
+	bbl = NYCDBWrapper.getBBL(building,street,borough)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
@@ -142,7 +131,7 @@ def getUserStatus(email):
 #get passed user id -> call getUserAddress to find address,
 #query NYCDB to see other complaints of same address -> return JSON
 	user_id = request.form['id']
-	complaints = getSameComplaints(user_id)
+	complaints = NYCDBWrapper.getSameComplaints(user_id)
 	return complaints
 
 @app.route('/resetUserPassword', methods=['POST'])
@@ -151,15 +140,7 @@ def resetPassword():
 	statusCode = "0"
 	return {"status" : statusCode}
 
-def getBBL(building, street, borough):
-	appID = get_nyc_appID()
-	appKey = get_nyc_appKey()
-	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+building+'&street='+street+'&borough='+borough+'&app_id='+appID+'&app_key='+appKey;
-	print(formatString)
-	resp = requests.get(url=formatString)
-	data = resp.json() # Check the JSON Response Content documentation below
-	print(data['address']['bbl'])
-	return (data['address']['bbl'])
+
 
 #endregion
 
@@ -212,7 +193,7 @@ def getUIDComplaints(user_id):
 	x = user.find_one({'id' : user_id})
 	if x:
 		bbl = x['bbl']
-		result = findAllComplaints(bbl)
+		result = NYCDBWrapper.findAllComplaints(bbl)
 		return result
 	return "No Complaints Found"
 
@@ -222,39 +203,5 @@ def getAddress(UID):
 	x = user.find_one({'id' : UID})
 	return x['address']
 
-def get_dataToken():
-	path = './apiKeys/dataToken.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
 
-def cleanComplaints(complaintData):
-	open_complaints = []
-	closed_complaints = []
-	for complaint in complaintData:
-		fresh = {}
-		try:
-			fresh['Date_Created'] = complaint['created_date']
-		except:
-			fresh['Date_Created'] = "N/A"
-		try:
-			fresh['Updated_On'] = complaint['resolution_action_updated_date']
-		except:
-			fresh['Updated_On'] = "N/A"
-		try:
-			fresh['Description'] = complaint['resolution_description']
-		except:
-			fresh['Description'] = "N/A"
-		if(complaint['status'] == 'Closed'):
-			closed_complaints.append(fresh)
-		else:
-			open_complaints.append(fresh)
-	return [open_complaints, closed_complaints, len(open_complaints)+len(closed_complaints)]
 
-def findAllComplaints(bbl):
-	token = get_dataToken()
-	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
-	r = urllib.urlopen(url)
-	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
-	return cleanComplaints(data)
