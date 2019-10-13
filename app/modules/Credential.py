@@ -1,20 +1,18 @@
+from dotenv import load_dotenv
+import os
+SENDGRID_KEY = os.getenv("SENDGRID_KEY")
+NYC_ID = os.getenv("INQ_ID")
+NYC_KEY = os.getenv("INQ_KEY")
+PLACES_KEY = os.getenv("PLACES_KEY")
+
+def get_places_key():
+	return PLACES_KEY
+
 def get_sg_key():
-	path = 'apiKeys/sendgridKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
+	return SENDGRID_KEY
 
 def get_nyc_appID():
-	path = 'apiKeys/nyc-appID.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
+	return NYC_ID
 
 def get_nyc_appKey():
-	path = 'apiKeys/appKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
+	return NYC_KEY

@@ -4,3 +4,4 @@
 app/apiKeys/
 venv/
 *pyc
+.env

@@ -120,9 +120,6 @@ def resetPassword():
 	email = request.form['email']
 	statusCode = "0"
 	return {"status" : statusCode}
-
-
-
 #endregion
 
 #Begin page-serve routes
@@ -162,9 +159,6 @@ def serveDetails():
 #endregion
 
 def getURL():
-	path = './apiKeys/placesKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
+	myKey = Credential.get_places_key()
 	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
 	return apiString
