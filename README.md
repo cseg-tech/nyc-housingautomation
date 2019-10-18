@@ -7,10 +7,20 @@ A notification system that alerts NYC tenants, tenant organizers, and other user
  - Setup a virtual environment using virtualenv venv. Download virtualenv <a href="https://www.andreagrandi.it/2018/12/19/installing-python-and-virtualenv-on-osx/">here</a>
  - Install the required packages from requirements.txt into your venv
   - Ensure that your MongoDB instance is active
+  - This project requires a .env file at its root to run. Please contact the authors for access to the same, or compile your own based on the guidelines below.
  - ```python run.py```
 
 ## Unit Tests:
  - To run unit tests, run ```python -m unittest tests.py``` from your root directory.
+ 
+ ## Environment Variable Guidelines
+ This project depends on a number of environment variables to run succesfully. The same have been listed and described below.
+ - NYC_311_TOKEN: Token to query NYC Open Data's 311 database. Ref <a href="https://opendata.cityofnewyork.us/">here</a>
+ - GEOCLI_ID: A valid ID for the NYC <a href="https://maps.nyc.gov/geoclient/v1/doc">GeoClient API</a>
+ - GEOCLI_KEY: A private key for the same ID to the NYC <a href="https://maps.nyc.gov/geoclient/v1/doc">GeoClient API</a>
+ - MONGO_UNAME: A username for a MongoDB Atlas Cloud Instance with the appropriate database permissions
+ - MONGO_PASS: A password for the afformentioned MongoDB user instance
+ - SENDGRID_KEY: An API key to access SendGrid's email sending service. Ref <a href="https://sendgrid.com/">here</a>
 
 ## Overview
 ### Use Cases
