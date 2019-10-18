@@ -10,10 +10,10 @@ A notification system that alerts NYC tenants, tenant organizers, and other user
   - This project requires a .env file at its root to run. Please contact the authors for access to the same, or compile your own based on the guidelines below.
  - ```python run.py```
 
-## Unit Tests:
+### Unit Tests:
  - To run unit tests, run ```python -m unittest tests.py``` from your root directory.
  
- ## Environment Variable Guidelines
+ ### Environment Variable Guidelines
  This project depends on a number of environment variables to run succesfully. The same have been listed and described below.
  - NYC_311_TOKEN: Token to query NYC Open Data's 311 database. Ref <a href="https://opendata.cityofnewyork.us/">here</a>
  - GEOCLI_ID: A valid ID for the NYC <a href="https://maps.nyc.gov/geoclient/v1/doc">GeoClient API</a>
