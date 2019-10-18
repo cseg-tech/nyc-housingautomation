@@ -16,6 +16,8 @@ from pymongo import MongoClient
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
 
+from ..modules import NYCDBWrapper as NYCDBWrapper
+
 
 #connect to local MongoDB
 def init_Mongo():
@@ -26,6 +28,7 @@ def init_Mongo():
 #login user to database
 def DB_login_user(db, email, password, statusCode):
     #Connect to DB and insert, and then change the values of result and status code accordingly
+    result = 0
     user = db.users
     x = user.find_one({'email' : email})
     print(x)
@@ -35,6 +38,7 @@ def DB_login_user(db, email, password, statusCode):
         y = x['password']
         if password == y:
             statusCode = "0"
+            result = 1
         else:
             statusCode = "1"
     else:
@@ -46,12 +50,17 @@ def DB_login_user(db, email, password, statusCode):
 
 #register user to database
 def DB_register_user(db, id, email, password, address, bbl, statusCode):
+    result = 0
+    statusCode = "0"
     #Connect to DB and insert, and then change the values of result and status code accordingly
+
+    # Status code == 1 implies that an id with that email already exists
     user = db.users
     x = user.find_one({'email' : email})
     if x:
-        statusCode = "0"
+        statusCode = "1"
     else:
+        result = 1
         user.insert_one({'email': email, 'password': password, 'address': address, 'id': id, 'bbl':bbl})
 
     resultJson = jsonify({"valid" : result, "status" : statusCode})
@@ -64,7 +73,7 @@ def getUIDComplaints(db, user_id):
     x = user.find_one({'id' : user_id})
     if x:
         bbl = x['bbl']
-        result = findAllComplaints(bbl)
+        result = NYCDBWrapper.findAllComplaints(bbl)
         return result
     return "No Complaints Found"
 
@@ -75,41 +84,5 @@ def getAddress(db, UID):
     user = db.users
     x = user.find_one({'id' : UID})
     return x['address']
-
-
-
-#-----------helper functions---------------
-
-def cleanComplaints(complaintData):
-    open_complaints = []
-    closed_complaints = []
-    for complaint in complaintData:
-        fresh = {}
-        try:
-            fresh['Date_Created'] = complaint['created_date']
-        except:
-            fresh['Date_Created'] = "N/A"
-        try:
-            fresh['Updated_On'] = complaint['resolution_action_updated_date']
-        except:
-            fresh['Updated_On'] = "N/A"
-        try:
-            fresh['Description'] = complaint['resolution_description']
-        except:
-            fresh['Description'] = "N/A"
-        if(complaint['status'] == 'Closed'):
-            closed_complaints.append(fresh)
-        else:
-            open_complaints.append(fresh)
-    return [open_complaints, closed_complaints, len(open_complaints)+len(closed_complaints)]
-
-
-def findAllComplaints(bbl):
-    token = get_dataToken()
-    url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
-    r = urllib.urlopen(url)
-    data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
-    return cleanComplaints(data)
-
 
 

@@ -65,8 +65,6 @@ scheduler.start()'''
 def loginUser():
 	email = request.form['email']
 	password = request.form['password']
-	print(email)
-	print(password)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
@@ -82,6 +80,7 @@ def loginUser():
 	1 - Wrong Password
 	2 - Email ID doesn't exist
 	3 - Unforseen error'''
+	
 	return resultJson
 
 @app.route('/registerUser', methods=['POST'])

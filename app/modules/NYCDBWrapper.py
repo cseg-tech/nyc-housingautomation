@@ -1,6 +1,5 @@
 import json
-import urllib
-import requests
+import urllib.request
 
 from ..modules import Credential as Credential
 
@@ -26,21 +25,15 @@ def cleanComplaints(complaintData):
 		else:
 			open_complaints.append(fresh)
 	return [open_complaints, closed_complaints, len(open_complaints)+len(closed_complaints)]
-
-
+	
 def findAllComplaints(bbl):
-	token = get_dataToken()
-	url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
-	r = urllib.urlopen(url)
-	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
-	return cleanComplaints(data)
+    token = Credential.get_nycdb_token()
+    url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
+    print(url)
+    with urllib.request.urlopen(url) as r:
+    	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
+    return cleanComplaints(data)
 
-def get_dataToken():
-	path = './apiKeys/dataToken.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
 
 def getBBL(building, street, borough):
 	appID = Credential.get_nyc_appID()
