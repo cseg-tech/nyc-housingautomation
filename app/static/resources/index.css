@@ -1,3 +1,5 @@
+/*-----------------------------selectors--------------------------*/
+
 * {
   margin: 0;
   padding: 0;
@@ -9,35 +11,125 @@ html, body {
   height: 100%;
 }
 
+
+/*-----------------------------classes--------------------------*/
+/* Links inside the navbar */
+
+.about{
+  background: url("nyc_skyline.jpg") no-repeat center center fixed;
+  background-size: cover;
+  height: 300px;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 200px rgba(255,255,255,0.3);
+  filter: blur(15px);
+}
+.center{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.border {
+  border-top: 2px solid rgba(255, 255, 255, .5);
+  border-bottom: 2px solid rgba(255, 255, 255, .5);
+  height: 200px;
+  top: 30%;
+  width: 100%;
+  overflow: hidden;
+}
+.text {
+  height: 200px;
+}
+.text h1{
+  text-align: center;
+  text-shadow: 1px 1px rgba(0, 0, 0, .1);
+  color: #f2f2f2;
+  margin-top: 50px;
+  font-weight: 500;
+  font-size: 30px;
+}
+.navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.navbar button {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change background on mouse-over */
+.navbar a:hover {
+  background: #ddd;
+  color: black;
+}
+
+
+.topCorner{
+   position:absolute;
+   top:0;
+   right:0;
+  }
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+}
+/*-----------------------------id--------------------------*/
+
 #masterHero {
-  /*background-image: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 100%), url("nyc_skyline.jpg");*/
+
   background-image: url("nyc_skyline.jpg");
   background-color: rgba(255, 255, 255, 0.55);
-    background-blend-mode: lighten;
+  background-blend-mode: lighten;
   width: 100%;
   height: 100%;
   min-width: 100%;
   min-height: 100%;
-    /* Position and center the image to scale nicely on all screens */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-    text-align: center;
+  background-size: cover;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  text-align: center;
 }
 
 #centralButtons {
     display: inline-block;
     position: relative;
-    top: 50%;
+    top: 20%;
+    left: 20%
     transform: translateY(-50%);
 }
 
 #loginButton {
-  padding: 0 20 20 0;
+  /*padding: 0 20 20 0;
   font-size: 14px;
   border: none;
-  background: none;
+  background: none;*/
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }
 
 #signUpButton {
@@ -47,17 +139,16 @@ html, body {
   background: none;
 }
 
-#mainHead {
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
 
 #infoButton {
-
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }
 
-.topCorner{
-   position:absolute;
-   top:0;
-   right:0;
-  }
+#mainHead{
+  background-color: #333;
+}

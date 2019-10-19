@@ -1,20 +1,25 @@
-<!-- templates/index.html -->  
+<!-- templates/index.html -->
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='resources/index.css') }}>
+  <link rel="stylesheet" type="text/css" href='../static/resources/index.css'>
 </head>
   <body>
   <div id="masterHero">
-    <button id="infoButton" class="topCorner">Portal Info</button>
 
-    <div id = "centralButtons">
-      <h2 id="mainHead"> Making housing complaints more accessible </h2>
-      <button id="loginButton">Enter Portal</button>
-    </div>
-
+    <div class="navbar">
+ 	  <a id="loginButton">Enter Portal</a>
+  	<a href="http://www.columbiaseg.org/cseg-tech">CSEG Tech</a>
+    <a id="infoButton" class="topCorner">Portal Info</a>
+	</div>
+  <div class="border center">
+    <div class="about"></div>
+      <div class="text center">
+        <h1 class="">Making housing complaints more accessible</h1>
+      </div>
   </div>
-  <script> 
+
+  <script>
     document.getElementById("loginButton").onclick = function () {
         location.href = "login";
     };
