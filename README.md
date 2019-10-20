@@ -1,6 +1,8 @@
 # NYC Housing Complaint Alert System
-A notification system that alerts NYC tenants, tenant organizers, and other users who sign up for the service whenever a housing complaint is filed in their building. <br>
-For additional information, please find our project scope <a href="https://github.com/cseg-tech/nyc-housingautomation/blob/master/docs/ProjectScope.md">here</a>
+A notification system that alerts NYC tenants, tenant organizers, and other users who sign up for the service whenever a housing complaint is filed in their building.
+
+## Project Details
+Please find this project's scope document and other details <a href="https://github.com/cseg-tech/nyc-housingautomation/blob/master/docs/ProjectScope.md">here</a>
 
 ## Setup:
  - Navigate to project directory on terminal, ensure that dependancies are installed
