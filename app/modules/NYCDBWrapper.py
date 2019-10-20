@@ -1,6 +1,6 @@
 import json
 import urllib.request
-
+import requests
 from ..modules import Credential as Credential
 
 def cleanComplaints(complaintData):
