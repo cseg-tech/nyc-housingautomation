@@ -3,5 +3,6 @@
 .DS_STORE
 app/apiKeys/
 venv/
+virtualenv/
 *pyc
 .env
