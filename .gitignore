@@ -6,3 +6,6 @@ venv/
 virtualenv/
 *pyc
 .env
+*.un~
+.env~
+*~

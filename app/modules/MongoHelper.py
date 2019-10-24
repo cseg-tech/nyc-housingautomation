@@ -12,7 +12,7 @@ import string, random, requests, hashlib
 
 # Custom packages
 from sendgrid.helpers.mail import Mail
-from pymongo import MongoClient
+import pymongo
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
 
@@ -21,15 +21,16 @@ from ..modules import NYCDBWrapper as NYCDBWrapper
 
 #connect to local MongoDB
 def init_Mongo():
-    client = MongoClient('mongodb://localhost:27017')
-    db = client.nycautomation
-    return db
+    client = pymongo.MongoClient("mongodb+srv://MONGO_UNAME:MONGO_PASS@cluster1-smxun.mongodb.net/test?retryWrites=true&w=majority",maxPoolSize=50, connect=False)
+    db = pymongo.database.Database(mongo, 'userdata')
+    col = pymongo.collection.Collection(db, 'nycauto')
+    return col
 
 #login user to database
-def DB_login_user(db, email, password, statusCode):
+def DB_login_user(col, email, password, statusCode):
     #Connect to DB and insert, and then change the values of result and status code accordingly
     result = 0
-    user = db.users
+    user = col.users
     x = user.find_one({'email' : email})
     print(x)
     id_save = 00000
@@ -49,13 +50,13 @@ def DB_login_user(db, email, password, statusCode):
     return resultJson
 
 #register user to database
-def DB_register_user(db, id, email, password, address, bbl, statusCode):
+def DB_register_user(col, id, email, password, address, bbl, statusCode):
     result = 0
     statusCode = "0"
     #Connect to DB and insert, and then change the values of result and status code accordingly
 
     # Status code == 1 implies that an id with that email already exists
-    user = db.users
+    user = col.users
     x = user.find_one({'email' : email})
     if x:
         statusCode = "1"
@@ -68,8 +69,8 @@ def DB_register_user(db, id, email, password, address, bbl, statusCode):
     return resultJson
 
 #get other building complaints for a given user id
-def getUIDComplaints(db, user_id):
-    user = db.users
+def getUIDComplaints(col, user_id):
+    user = col.users
     x = user.find_one({'id' : user_id})
     if x:
         bbl = x['bbl']
@@ -79,9 +80,9 @@ def getUIDComplaints(db, user_id):
 
 
 #get address for a given user ID
-def getAddress(db, UID):
+def getAddress(col, UID):
     #Connect to DB and insert, and then change the values of result and status code accordingly
-    user = db.users
+    user = col.users
     x = user.find_one({'id' : UID})
     return x['address']
 

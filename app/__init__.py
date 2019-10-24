@@ -22,7 +22,8 @@ app = Flask(__name__)
 # COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-db = MongoHelper.init_Mongo()
+#collection instance of DB
+col = MongoHelper.init_Mongo()
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -51,7 +52,7 @@ def cron_job():
 	if(emailNeeded):
 		print("sending...")
 		to = "example@email.com"
-		content = "Hi"
+		content = "Hi"	
 		send_mail(sg_key, to, content)
 
 scheduler = BlockingScheduler()
@@ -71,7 +72,7 @@ def loginUser():
 	result = "true"
 	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-	resultJson = MongoHelper.DB_login_user(db, email, password, statusCode)
+	resultJson = MongoHelper.DB_login_user(col, email, password, statusCode)
     
 	print(resultJson)
 	'''
@@ -102,7 +103,7 @@ def registerUser():
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-	resultJson = MongoHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
+	resultJson = MongoHelper.DB_register_user(col, identifier, email, password, address, bbl, statusCode)
     
 	return resultJson
 
@@ -139,8 +140,8 @@ def serveSignUp():
 @app.route('/mainpage', methods=['GET'])
 def serveMainPage():
 	user = request.args.get('UID')
-	address = MongoHelper.getAddress(db, user)
-	complaints = MongoHelper.getUIDComplaints(db, user)
+	address = MongoHelper.getAddress(col, user)
+	complaints = MongoHelper.getUIDComplaints(col, user)
 	open_complaints = json.dumps(complaints[0])
 	closed_complaints = json.dumps(complaints[1])
 	number = complaints[2]
