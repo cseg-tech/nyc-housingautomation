@@ -9,3 +9,4 @@ virtualenv/
 *.un~
 .env~
 *~
+env/

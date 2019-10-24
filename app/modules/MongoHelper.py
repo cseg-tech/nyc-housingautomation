@@ -9,6 +9,7 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
+import dnspython
 
 # Custom packages
 from sendgrid.helpers.mail import Mail
