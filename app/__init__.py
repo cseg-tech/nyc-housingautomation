@@ -97,7 +97,7 @@ def registerUser():
 	street = data['street']
 	address = building+" "+street
 	borough = data['borough']
-	print(email)
+	print("Getting BBL for: "+json.dumps(data))
 	bbl = NYCDBWrapper.getBBL(building,street,borough)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
@@ -127,6 +127,28 @@ def resetPassword():
 	email = data['email']
 	statusCode = "0"
 	return {"status" : statusCode}
+
+@app.route('/getBBLDetails', methods=['POST'])
+def getBBLDetails():
+	data = request.get_json(force=True)
+	user = data['UID']
+
+	address = MongoHelper.getAddress(db, user)
+	complaints = MongoHelper.getUIDComplaints(db, user)
+
+	open_complaints = complaints[0]
+	closed_complaints = complaints[1]
+	number = complaints[2]
+
+	returnData = {}
+	returnData["address"] = address
+	returnData["open_complaints"] = open_complaints
+	returnData["closed_complaints"] = closed_complaints
+	returnData["number"] = number
+
+	return returnData
+
+
 #endregion
 
 #Begin page-serve routes
@@ -134,6 +156,7 @@ def resetPassword():
 @app.route("/")
 def index():
     return render_template("index.html")
+
 '''
 @app.route('/', methods=['GET'])
 def serveIndex():

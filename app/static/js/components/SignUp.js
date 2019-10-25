@@ -10,7 +10,7 @@ export default class SignUp extends React.Component {
             password: "",
             buildingno:0,
             street:"",
-            borough:""
+            borough:"manhattan"
         }
         this.setEmail = this.setEmail.bind(this);
         this.setPassword = this.setPassword.bind(this);
@@ -27,18 +27,16 @@ export default class SignUp extends React.Component {
           street,
           borough
       };
-
+      let that = this;
       fetch('/registerUser', {method: 'post', body:JSON.stringify(payload)})
         .then(function(response) {return response.json();})
         .then(function(data) {
             console.log(data);
-            status = data['status']
-            valid = data['valid']
-            if(!valid) {
-                console.log(status)
-                //Handle invalid here
+            if(!data['valid']) {
+                console.log(data['status'])
             } else {
-                this.props.backHome();
+                alert("Sucessful Registration");
+                that.props.backHome();
             }
         });
     }
@@ -92,16 +90,15 @@ export default class SignUp extends React.Component {
                     />
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlSelect1">
-                    <Form.Label>Example select</Form.Label>
-                    <Form.Control as="select"
-                    onChange={e => this.setState({borough: e.target.value})}>
-                    <option>Manhattan</option>
-                    <option>Brooklyn</option>
-                    <option>Bronx</option>
-                    <option>Queens</option>
+                    <Form.Label>Borough</Form.Label>
+                    <Form.Control as="select" value={this.state.borough} onChange={e => {this.setState({borough: e.target.value})}}>
+                    <option value="manhattan">Manhattan</option>
+                    <option value="brooklyn">Brooklyn</option>
+                    <option value="bronx">Bronx</option>
+                    <option value="queens">Queens</option>
                     </Form.Control>
                 </Form.Group>
-                <Button disabled={!this.validateForm} onClick={this.handleSubmit}>Login</Button>
+                <Button disabled={!this.validateForm} onClick={this.handleSubmit}>Sign Up</Button>
                 <Button onClick={this.props.back}>Back</Button>
             </div>
           );
