@@ -28,7 +28,7 @@ export default class SignUp extends React.Component {
           borough
       };
 
-      fetch('http://localhost:5000/loginUser', {method: 'post', body:JSON.stringify(payload)})
+      fetch('/registerUser', {method: 'post', body:JSON.stringify(payload)})
         .then(function(response) {return response.json();})
         .then(function(data) {
             console.log(data);
@@ -39,7 +39,6 @@ export default class SignUp extends React.Component {
                 //Handle invalid here
             } else {
                 this.props.backHome();
-                console.log("ERROR"+statusCode);//Handle error and display
             }
         });
     }

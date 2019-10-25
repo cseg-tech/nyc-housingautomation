@@ -17,25 +17,26 @@ export default class Login extends React.Component {
 
   handleSubmit() {
     let {email, password} = this.state;
+    
     let payload = {
-        email,
-        password
+      email, password
     };
-    console.log(payload);
-    fetch('http://localhost:5000/loginUser', {method: 'post', body:JSON.stringify(payload)})
-    .then(function(response) {return response.json();})
-    .then(function(data) {
-        console.log(data);
-        const result = data['valid']
-        const uniqueID = data['id']
-        const statusCode = data['status']
-        if(result) {
-          Cookies.set('loginToken', uniqueID);
-          this.props.backHome();
-        } else {
-          console.log("ERROR"+statusCode);//Handle error and display
-        }
-    });
+    var that = this;
+    fetch('/loginUser', {method: 'post', body:JSON.stringify(payload)})
+        .then(function(response) {return response.json();})
+        .then(function(data) {
+            console.log(data);
+            const result = data['valid']
+            const uniqueID = data['id']
+            const statusCode = data['status']
+            if(result == 0) {
+              console.log("Logging in...")
+              Cookies.set('loginToken', uniqueID);
+              that.props.backHome();
+            } else {
+              console.log("ERROR"+statusCode);//Handle error and display
+            }
+        });
   }
 
   validateForm() {

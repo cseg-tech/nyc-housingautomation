@@ -32,7 +32,8 @@ export default class App extends React.Component {
 
   signOut() {
     Cookies.remove('loginToken');
-    // Force reload somehow
+    // RELOAD DOESN'T WORK
+    window.location.reload();
   }
 
   backHome() {
