@@ -13,6 +13,7 @@ This project requires both Python, and NodeJS to run. The backend has been built
  - Install the required packages from requirements.txt into your venv
  - Ensure that your MongoDB instance is active
  - Naviate to app/static, and run ```npm install``` to install the required dependancies for the ReactJS frontend.
+ - From the root, run ```./refreshReact.sh``` to generate a fresh build of the ReactJS frontend.
  - This project requires a .env file at its root to run. Please contact the authors for access to the same, or compile your own based on the guidelines below.
  - ```python run.py```
 
