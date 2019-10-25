@@ -12,8 +12,9 @@ This project requires both Python, and NodeJS to run. The backend has been built
  - Setup a virtual environment using virtualenv venv. Download virtualenv <a href="https://www.andreagrandi.it/2018/12/19/installing-python-and-virtualenv-on-osx/">here</a>
  - Install the required packages from requirements.txt into your venv
  - Ensure that your MongoDB instance is active
- - Naviate to app/static, and run ```npm install``` to install the required dependancies for the ReactJS frontend.
- - From the root, run ```./refreshReact.sh``` to generate a fresh build of the ReactJS frontend.
+ - If you plan to just run the frontend and develop the backend stack, skip the below sub-steps. If you plan to develop for the front-end stack:
+    - Naviate to app/static, and run ```npm install``` to install the required dependancies for the ReactJS frontend.
+    - In run.py, uncomment the call to ```refreshReact.sh```, which creates a new build for every server build
  - This project requires a .env file at its root to run. Please contact the authors for access to the same, or compile your own based on the guidelines below.
  - ```python run.py```
 
