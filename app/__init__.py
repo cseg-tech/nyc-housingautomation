@@ -17,8 +17,7 @@ from .modules import NYCDBWrapper
 from .modules import Communications
 from .modules import Credential
 
-
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./static/dist", template_folder="./static")
 # COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
@@ -122,6 +121,11 @@ def resetPassword():
 #endregion
 
 #Begin page-serve routes
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+'''
 @app.route('/', methods=['GET'])
 def serveIndex():
 	return render_template('/index.html')
@@ -156,6 +160,7 @@ def serveDetails():
 	locKey = request.args.get('locationID')
 	return render_template('/locationdetails.html',myLocationKey=locKey)
 #endregion
+'''
 
 def getURL():
 	myKey = Credential.get_places_key()
