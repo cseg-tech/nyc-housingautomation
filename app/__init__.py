@@ -4,7 +4,11 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
+<<<<<<< HEAD
 #import dnspython
+=======
+import json
+>>>>>>> c965df17c5b247c247c280ae7ba4aa90e6040f0f
 
 # Imported packages
 from sendgrid.helpers.mail import Mail
@@ -18,13 +22,19 @@ from .modules import NYCDBWrapper
 from .modules import Communications
 from .modules import Credential
 
-
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./static/dist", template_folder="./static")
 # COMMENT OUT THE NEXT LINE BEFORE PRODUCTION
+import logging
+logging.basicConfig(level=logging.DEBUG)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+<<<<<<< HEAD
 
 #collection instance of DB
 db, col = MongoHelper.init_Mongo()
+=======
+		
+db = MongoHelper.init_Mongo()
+>>>>>>> c965df17c5b247c247c280ae7ba4aa90e6040f0f
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -65,8 +75,10 @@ scheduler.start()'''
 #Begin Helper Routes
 @app.route('/loginUser', methods=['POST'])
 def loginUser():
-	email = request.form['email']
-	password = request.form['password']
+	# print(request.get_data())
+	data = request.get_json(force=True)
+	email = data['email']
+	password = data['password']
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
@@ -76,6 +88,7 @@ def loginUser():
 	resultJson = MongoHelper.DB_login_user(db, col, email, password, statusCode)
     
 	print(resultJson)
+
 	'''
 	Status Codes:
 	0 - Sucessful
@@ -87,13 +100,14 @@ def loginUser():
 
 @app.route('/registerUser', methods=['POST'])
 def registerUser():
-	email = request.form['email']
-	password = request.form['password']
-	building = request.form['building']
-	street = request.form['street']
+	data = request.get_json(force=True)
+	email = data['email']
+	password = data['password']
+	building = data['building']
+	street = data['street']
 	address = building+" "+street
-	borough = request.form['borough']
-	print(email)
+	borough = data['borough']
+	print("Getting BBL for: "+json.dumps(data))
 	bbl = NYCDBWrapper.getBBL(building,street,borough)
 	hasher = hashlib.sha256()
 	hasher.update(password.encode('utf8'))
@@ -104,26 +118,61 @@ def registerUser():
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
+<<<<<<< HEAD
 	resultJson = MongoHelper.DB_register_user(db, col, identifier, email, password, address, bbl, statusCode)
     
+=======
+	resultJson = MongoHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
+
+>>>>>>> c965df17c5b247c247c280ae7ba4aa90e6040f0f
 	return resultJson
 
 @app.route('/getUserStatus', methods=['POST'])
 def getUserStatus(email):
 #get passed user id -> call getUserAddress to find address,
 #query NYCDB to see other complaints of same address -> return JSON
-	user_id = request.form['id']
+	data = request.get_json(force=True)
+	user_id = data['id']
 	complaints = NYCDBWrapper.getSameComplaints(user_id)
 	return complaints
 
 @app.route('/resetUserPassword', methods=['POST'])
 def resetPassword():
-	email = request.form['email']
+	data = request.get_json(force=True)
+	email = data['email']
 	statusCode = "0"
 	return {"status" : statusCode}
+
+@app.route('/getBBLDetails', methods=['POST'])
+def getBBLDetails():
+	data = request.get_json(force=True)
+	user = data['UID']
+
+	address = MongoHelper.getAddress(db, user)
+	complaints = MongoHelper.getUIDComplaints(db, user)
+
+	open_complaints = complaints[0]
+	closed_complaints = complaints[1]
+	number = complaints[2]
+
+	returnData = {}
+	returnData["address"] = address
+	returnData["open_complaints"] = open_complaints
+	returnData["closed_complaints"] = closed_complaints
+	returnData["number"] = number
+
+	return returnData
+
+
 #endregion
 
 #Begin page-serve routes
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+'''
 @app.route('/', methods=['GET'])
 def serveIndex():
 	return render_template('/index.html')
@@ -158,6 +207,7 @@ def serveDetails():
 	locKey = request.args.get('locationID')
 	return render_template('/locationdetails.html',myLocationKey=locKey)
 #endregion
+'''
 
 def getURL():
 	myKey = Credential.get_places_key()

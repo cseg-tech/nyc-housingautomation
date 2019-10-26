@@ -1,12 +1,8 @@
-/node-modules
 /__pycache__
 .DS_STORE
-app/apiKeys/
 venv/
 virtualenv/
 *pyc
 .env
-*.un~
-.env~
-*~
 env/
+app/static/node_modules/
