@@ -4,7 +4,7 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
-import dnspython
+#import dnspython
 
 # Imported packages
 from sendgrid.helpers.mail import Mail
@@ -24,7 +24,7 @@ app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #collection instance of DB
-col = MongoHelper.init_Mongo()
+db, col = MongoHelper.init_Mongo()
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -73,7 +73,7 @@ def loginUser():
 	result = "true"
 	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-	resultJson = MongoHelper.DB_login_user(col, email, password, statusCode)
+	resultJson = MongoHelper.DB_login_user(db, col, email, password, statusCode)
     
 	print(resultJson)
 	'''
@@ -104,7 +104,7 @@ def registerUser():
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-	resultJson = MongoHelper.DB_register_user(col, identifier, email, password, address, bbl, statusCode)
+	resultJson = MongoHelper.DB_register_user(db, col, identifier, email, password, address, bbl, statusCode)
     
 	return resultJson
 
@@ -141,8 +141,8 @@ def serveSignUp():
 @app.route('/mainpage', methods=['GET'])
 def serveMainPage():
 	user = request.args.get('UID')
-	address = MongoHelper.getAddress(col, user)
-	complaints = MongoHelper.getUIDComplaints(col, user)
+	address = MongoHelper.getAddress(db, col, user)
+	complaints = MongoHelper.getUIDComplaints(db, col, user)
 	open_complaints = json.dumps(complaints[0])
 	closed_complaints = json.dumps(complaints[1])
 	number = complaints[2]
