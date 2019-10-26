@@ -23,7 +23,6 @@ app = Flask(__name__, static_folder="./static/dist", template_folder="./static")
 import logging
 logging.basicConfig(level=logging.DEBUG)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-<<<<<<< HEAD
 
 #collection instance of DB
 db, col = MongoHelper.init_Mongo()
@@ -134,8 +133,8 @@ def getBBLDetails():
 	data = request.get_json(force=True)
 	user = data['UID']
 
-	address = MongoHelper.getAddress(db, user)
-	complaints = MongoHelper.getUIDComplaints(db, user)
+	address = MongoHelper.getAddress(db, col, user)
+	complaints = MongoHelper.getUIDComplaints(db, col, user)
 
 	open_complaints = complaints[0]
 	closed_complaints = complaints[1]

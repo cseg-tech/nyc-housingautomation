@@ -1,8 +1,10 @@
 /__pycache__
+.vscode/
 .DS_STORE
 venv/
 virtualenv/
 *pyc
 .env
 env/
+*~
 app/static/node_modules/

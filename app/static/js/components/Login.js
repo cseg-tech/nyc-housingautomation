@@ -29,7 +29,7 @@ export default class Login extends React.Component {
             const result = data['valid']
             const uniqueID = data['id']
             const statusCode = data['status']
-            if(result == 0) {
+            if(result == 1) {
               console.log("Logging in...")
               Cookies.set('loginToken', uniqueID);
               that.props.backHome();
