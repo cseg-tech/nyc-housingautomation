@@ -4,11 +4,7 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
-<<<<<<< HEAD
-#import dnspython
-=======
 import json
->>>>>>> c965df17c5b247c247c280ae7ba4aa90e6040f0f
 
 # Imported packages
 from sendgrid.helpers.mail import Mail
@@ -31,10 +27,6 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 #collection instance of DB
 db, col = MongoHelper.init_Mongo()
-=======
-		
-db = MongoHelper.init_Mongo()
->>>>>>> c965df17c5b247c247c280ae7ba4aa90e6040f0f
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -83,7 +75,7 @@ def loginUser():
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
 	result = "true"
-	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
+	statusCode = "3" # Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
 	resultJson = MongoHelper.DB_login_user(db, col, email, password, statusCode)
     
@@ -118,13 +110,7 @@ def registerUser():
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-<<<<<<< HEAD
 	resultJson = MongoHelper.DB_register_user(db, col, identifier, email, password, address, bbl, statusCode)
-    
-=======
-	resultJson = MongoHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
-
->>>>>>> c965df17c5b247c247c280ae7ba4aa90e6040f0f
 	return resultJson
 
 @app.route('/getUserStatus', methods=['POST'])
