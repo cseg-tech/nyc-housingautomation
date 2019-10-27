@@ -10,6 +10,10 @@ NYCDB_TOKEN = os.getenv("NYC_311_TOKEN")
 MONGO_UNAME = os.getenv("MONGO_UNAME")
 MONGO_PASS = os.getenv("MONGO_PASS")
 
+TEST_USERNAME = os.getenv("SAMPLE_LOGIN")
+TEST_PASSWORD = os.getenv("SAMPLE_PASS")
+
+
 def get_places_key():
 	return PLACES_KEY
 
@@ -30,3 +34,9 @@ def getMongoID():
 
 def getMongoPass():
     return MONGO_PASS
+
+def getSampleLogin():
+	return TEST_USERNAME
+
+def getSamplePassword():
+	return TEST_PASSWORD
