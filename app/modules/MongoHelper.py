@@ -31,6 +31,13 @@ def init_Mongo():
     col = db["nycauto"]
     return (db, col)
 
+#remove user from database (only for unit testing purposes)
+def DB_remove_user(col, email):
+    cursor = col.find({'email': email})
+    for x in cursor:
+        print("removing email")
+        col.delete_one({"email": email})
+
 #login user to database
 def DB_login_user(db, col, email, password, statusCode):
     #Connect to DB and insert, and then change the values of result and status code accordingly
