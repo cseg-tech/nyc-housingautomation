@@ -2,8 +2,12 @@ import unittest
  
 from app import app 
 from app.modules import Credential
+from app.modules import MongoHelper
+
+db, col = MongoHelper.init_Mongo()
 
 class AutomationTests(unittest.TestCase):
+
 
     # executed prior to each test
     def setUp(self):
@@ -26,7 +30,7 @@ class AutomationTests(unittest.TestCase):
     # Begin test to check login functionality
     def test_login(self):
         sample_login = Credential.getSampleLogin()
-        sample_pass = Credential.getSamplePass()
+        sample_pass = Credential.getSamplePassword()
 
         # Check if account exists, asset
         return True
