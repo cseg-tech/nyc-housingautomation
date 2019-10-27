@@ -7,6 +7,8 @@ NYC_ID = os.getenv("GEOCLI_ID")
 NYC_KEY = os.getenv("GEOCLI_KEY")
 PLACES_KEY = os.getenv("PLACES_KEY")
 NYCDB_TOKEN = os.getenv("NYC_311_TOKEN")
+MONGO_UNAME = os.getenv("MONGO_UNAME")
+MONGO_PASS = os.getenv("MONGO_PASS")
 
 def get_places_key():
 	return PLACES_KEY
@@ -22,3 +24,9 @@ def get_nyc_appKey():
 
 def get_nycdb_token():
 	return NYCDB_TOKEN
+
+def getMongoID():
+    return MONGO_UNAME
+
+def getMongoPass():
+    return MONGO_PASS

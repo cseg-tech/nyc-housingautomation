@@ -23,8 +23,9 @@ app = Flask(__name__, static_folder="./static/dist", template_folder="./static")
 import logging
 logging.basicConfig(level=logging.DEBUG)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-		
-db = MongoHelper.init_Mongo()
+
+#collection instance of DB
+db, col = MongoHelper.init_Mongo()
 
 #PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
 #named myDatabase
@@ -53,7 +54,7 @@ def cron_job():
 	if(emailNeeded):
 		print("sending...")
 		to = "example@email.com"
-		content = "Hi"
+		content = "Hi"	
 		send_mail(sg_key, to, content)
 
 scheduler = BlockingScheduler()
@@ -73,9 +74,9 @@ def loginUser():
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
 	result = "true"
-	statusCode = "3" #Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
+	statusCode = "3" # Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-	resultJson = MongoHelper.DB_login_user(db, email, password, statusCode)
+	resultJson = MongoHelper.DB_login_user(db, col, email, password, statusCode)
     
 	print(resultJson)
 
@@ -108,8 +109,7 @@ def registerUser():
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-	resultJson = MongoHelper.DB_register_user(db, identifier, email, password, address, bbl, statusCode)
-
+	resultJson = MongoHelper.DB_register_user(db, col, identifier, email, password, address, bbl, statusCode)
 	return resultJson
 
 @app.route('/getUserStatus', methods=['POST'])
@@ -133,8 +133,8 @@ def getBBLDetails():
 	data = request.get_json(force=True)
 	user = data['UID']
 
-	address = MongoHelper.getAddress(db, user)
-	complaints = MongoHelper.getUIDComplaints(db, user)
+	address = MongoHelper.getAddress(db, col, user)
+	complaints = MongoHelper.getUIDComplaints(db, col, user)
 
 	open_complaints = complaints[0]
 	closed_complaints = complaints[1]
@@ -175,8 +175,8 @@ def serveSignUp():
 @app.route('/mainpage', methods=['GET'])
 def serveMainPage():
 	user = request.args.get('UID')
-	address = MongoHelper.getAddress(db, user)
-	complaints = MongoHelper.getUIDComplaints(db, user)
+	address = MongoHelper.getAddress(db, col, user)
+	complaints = MongoHelper.getUIDComplaints(db, col, user)
 	open_complaints = json.dumps(complaints[0])
 	closed_complaints = json.dumps(complaints[1])
 	number = complaints[2]
