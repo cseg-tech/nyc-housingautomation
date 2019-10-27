@@ -15,9 +15,9 @@ class AutomationTests(unittest.TestCase):
     def tearDown(self):
         pass
 
-    # Begin tests here
+    # BEGINREGION - Unit Tests
 
-    # Begin test to check main page response
+    # Begin test to check main React page response
     def test_main_page(self):
         response = self.app.get('/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
@@ -28,23 +28,21 @@ class AutomationTests(unittest.TestCase):
 
     # Begin test to check signup functionality
     def test_signup(self):
-        return 
-
-    # Begin test to check get_keys functionality
-    def test_keys(self):
         return True
 
-    # Begin test to check email functionality
-    def test_email(self):
+    # Begin test to check find complaonts for BBL functionality
+    def test_find_all_complaints(self):
         return True
 
-    # Begin test to check get BBL functionality
+    # Begin test to check get BBL from address functionality
     def test_get_bbl(self):
         return True
 
-    # Begin test to check findAllComplaints functionality
-    def test_find_all_complaints(self):
+    # Begin test to check email functionality
+    def test_send_email(self):
         return True
+
+    # ENDREGION - Unit Tests
 
 if __name__ == "__main__":
     unittest.main()
