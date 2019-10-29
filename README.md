@@ -30,6 +30,10 @@ This project requires both Python, and NodeJS to run. The backend has been built
  - MONGO_PASS: A password for the afformentioned MongoDB user instance
  - SENDGRID_KEY: An API key to access SendGrid's email sending service. Ref <a href="https://sendgrid.com/">here</a>
 
+## Deployment
+- This project is set to auto-deploy from the live branch
+- Please ensure that all dependancies have been written to requirements.txt, and the app sucessfully builds, before creating a PR to merge with live.
+
 ## License
 ![GitHub](https://img.shields.io/github/license/cseg-tech/nyc-housingautomation.svg)
 
