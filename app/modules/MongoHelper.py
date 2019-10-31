@@ -15,9 +15,11 @@ from sendgrid.helpers.mail import Mail
 import pymongo
 from apscheduler.schedulers.blocking import BlockingScheduler
 from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 from ..modules import NYCDBWrapper as NYCDBWrapper
 from ..modules import Credential as Credential
+from . import Communications 
 
 
 #connect to local MongoDB
@@ -30,12 +32,16 @@ def init_Mongo():
     col = db["nycauto"]
     return (db, col)
 
+#get sendgrid key
+key = Credential.get_sg_key()
+
 #remove user from database (only for unit testing purposes)
 def DB_remove_user(col, email):
     cursor = col.find({'email': email})
     for x in cursor:
         print("removing email")
         col.delete_one({"email": email})
+        break
 
 #login user to database
 def DB_login_user(db, col, email, password, statusCode):
@@ -51,8 +57,11 @@ def DB_login_user(db, col, email, password, statusCode):
         if x:
             id_save = x['id']
             y = x['password']
+            emailList = [x['email']]
             if password == y:
                 statusCode = "0" # success
+                #test sendgrind
+                Communications.send_email(key, emailList, 'Successful Login', 'Thanks for logging in!')
                 result = 1
             else:
                 statusCode = "1"# wrong pass
@@ -80,8 +89,11 @@ def DB_register_user(db, col, id, email, password, address, bbl, statusCode):
             return resultJson
 
     result = 1
+    emailList = [email]
     col.insert_one({'email': email, 'password': password, 'address': address, 'id': id, 'bbl':bbl})
     print("user inserted into database")
+    #test sendgrind
+    Communications.send_email(key, emailList, 'Successful Registration', 'Thank you for signing up to HousingAlertNYC!')
     
     resultJson = jsonify({"valid" : result, "status" : statusCode})
     return resultJson
