@@ -27,8 +27,6 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 #collection instance of DB
 db, col = MongoHelper.init_Mongo()
 
-#PyMongo connects to the MongoDB server running on port 27017 on localhost, to the database
-#named myDatabase
 
 '''path = './apiKeys/mongoURI.txt'
 with open(path, 'r') as myfile:
@@ -36,14 +34,8 @@ with open(path, 'r') as myfile:
 app.config["MONGO_URI"] = myURI
 mongo = PyMongo(app)'''
 
-def get_sg_key():
-	path = 'apiKeys/sendgridKey.txt'
-	myKey = 'noKey'
-	with open(path, 'r') as myfile:
-		myKey = myfile.read()
-	return myKey
-
-
+#get sendgrid key
+key = Credential.get_sg_key()
 
 '''
 sg_key = Credential.get_sg_key()
@@ -87,6 +79,8 @@ def loginUser():
 	2 - Email ID doesn't exist
 	3 - Unforseen error'''
 	
+	
+
 	return resultJson
 
 @app.route('/registerUser', methods=['POST'])
