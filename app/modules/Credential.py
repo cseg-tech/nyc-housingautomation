@@ -13,6 +13,10 @@ MONGO_PASS = os.getenv("MONGO_PASS")
 TEST_USERNAME = os.getenv("SAMPLE_LOGIN")
 TEST_PASSWORD = os.getenv("SAMPLE_PASS")
 
+EMAIL = os.getenv("EMAIL")
+
+def get_email():
+	return EMAIL
 
 def get_places_key():
 	return PLACES_KEY
