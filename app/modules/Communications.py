@@ -4,7 +4,7 @@ import requests
 import urllib
 import json
 import string, random, requests, hashlib
-import Credential
+from ..modules import Credential as Credential
 
 # custom packages
 from sendgrid import SendGridAPIClient

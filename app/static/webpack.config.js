@@ -21,6 +21,16 @@ const config = {
                 }
               }
             ],
+          }, 
+          {
+            test: /\.s?css$/,
+            use: ['style-loader', 'css-loader', 'sass-loader']
+          },
+          {
+            test: /\.(png|svg|jpg|gif)$/,
+            loader: "file-loader",
+            // Removed a / from /static
+            options: { name: 'static/[name].[ext]' }
           }
         ]
       }
