@@ -6,9 +6,10 @@
 }
 
 .hero::before {
+
 	background-image: url("https://media.cntraveler.com/photos/5b60c975dc28180da9d6d0d3/master/pass/Brooklyn-Bridge_GettyImages-514819551.jpg");
 	background-size: cover;
-	filter: brightness(55%);
+	filter: brightness(35%);
 	content: "";
 	display: block;
 	position: absolute;
