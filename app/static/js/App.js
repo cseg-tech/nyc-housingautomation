@@ -7,6 +7,8 @@ import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp"
 
+import "./styles/HomePage.css"
+
 
 export default class App extends React.Component {
   constructor() {
