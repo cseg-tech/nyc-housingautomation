@@ -42,7 +42,6 @@ class AutomationTests(unittest.TestCase):
             self.assertEqual(result["status"], '2')
             result = MongoHelper.DB_login_user(db, col, sample_login, sample_pass + "wrongpass", 0).get_json()
             self.assertEqual(result["status"], '1')
-        return True
 
     # Begin test to check signup functionality
     def test_signup(self):
@@ -56,7 +55,6 @@ class AutomationTests(unittest.TestCase):
             MongoHelper.DB_remove_user(col, sample_login)
             result = MongoHelper.DB_register_user(db, col, identifier, existing_login, sample_pass, "70 Morningside Drive", 1019610057, 0).get_json()
             self.assertEqual(result["status"], '1')
-        return True
 
     # # Begin test to check find complaonts for BBL functionality
     def test_find_all_complaints(self):
@@ -65,7 +63,6 @@ class AutomationTests(unittest.TestCase):
         self.assertIsNotNone(complaints[0])
         self.assertIsNotNone(complaints[1])
         # Check if closed and open complaints are both not null
-        return True
 
     # # Begin test to check get BBL from address functionality
     def test_get_bbl(self):
@@ -76,7 +73,6 @@ class AutomationTests(unittest.TestCase):
         borough = "manhattan"
         bbl = NYCDBWrapper.getBBL(house_num, street, borough)
         self.assertIsNotNone(bbl)
-        return True
 
     # Begin test to check email functionality
     def test_send_email(self):
