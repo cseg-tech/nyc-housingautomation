@@ -86,3 +86,15 @@
 .heroURL:hover {
 	color: white;
 }
+
+.heroButton {
+	padding-left: 1vw;
+	padding-right: 1vw;
+	text-decoration: none;
+	background-color: none;
+	color: white;
+}
+
+.heroButton:hover {
+	color: white;
+}

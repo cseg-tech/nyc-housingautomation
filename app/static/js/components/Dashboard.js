@@ -55,6 +55,7 @@ export default class Dashboard extends React.Component {
         }
         <Button variant="primary" >Change Building</Button>
         <Button variant="primary" >Edit Noficiations</Button>
+        <Button variant="primary" onClick={this.props.back}>Back</Button>
         <Button variant="primary" onClick={this.props.signOut}>Logout</Button>
       </div>
     );
