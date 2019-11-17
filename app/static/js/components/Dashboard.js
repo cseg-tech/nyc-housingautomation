@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 import Cookies from 'js-cookie'
 
 export default class Dashboard extends React.Component {
@@ -40,23 +40,74 @@ export default class Dashboard extends React.Component {
     let {open_complaints, closed_complaints, address, num_complaints} = this.state;
     return (
       <div>
-        <h3>Complaints for: {address} are: {num_complaints}</h3>
-        <h4>Open Complaints</h4>
-        {
-          open_complaints.map((complaint) => (
-            <p>{JSON.stringify(complaint)}</p>
-          ))
-        }
-        <h4>Closed Complaints</h4>
-        {
-          closed_complaints.map((complaint) => (
-            <p>{JSON.stringify(complaint)}</p>
-          ))
-        }
-        <Button variant="primary" >Change Building</Button>
-        <Button variant="primary" >Edit Noficiations</Button>
-        <Button variant="primary" onClick={this.props.back}>Back</Button>
-        <Button variant="primary" onClick={this.props.signOut}>Logout</Button>
+        <Row>
+          <Col sm={2}>
+            <h3 style={{textAllign:"center"}}>70 Morningside drive</h3>
+            <Button style={{textAllign:"center"}} variant="primary" >Change Building</Button>
+            <br />
+            <Button style={{textAllign:"center"}} variant="primary" >Edit Noficiations</Button>
+            <br />
+            <Button style={{textAllign:"center"}} variant="primary" onClick={this.props.signOut}>Logout</Button>
+            <br />
+            <a href="https://portal.311.nyc.gov/article/?kanumber=KA-01082" class="complain">Complain!</a>
+          </Col>
+          <Col sm={10}>
+            <div className="headerDiv">
+              <div className="headerLeft">
+                <h3>{num_complaints} Complaints</h3>
+                <h4>{address}</h4>
+              </div>
+              <Button className="accountButton">Account</Button>
+            </div>
+            <div className="complaintDiv">
+              <div className="upperPortion">
+                <Row>
+                  <Col>
+                    <div className="centerWrapper">
+                      <h4>Heading here</h4>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className="centerWrapper">
+                      <h4>Pie chart here</h4>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+              <div className="lowerPortion">
+                <Row>
+                  <Col>
+                    <div className="centerWrapper">
+                      <h4>Admin here</h4>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className="centerWrapper">
+                      <h4>Env here</h4>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className="centerWrapper">
+                      <h4>Safety here</h4>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+              <h4>Open Complaints</h4>
+              {
+                open_complaints.map((complaint) => (
+                  <p>{JSON.stringify(complaint)}</p>
+                ))
+              }
+              <h4>Closed Complaints</h4>
+              {
+                closed_complaints.map((complaint) => (
+                  <p>{JSON.stringify(complaint)}</p>
+                ))
+              }
+            </div>
+          </Col>
+        </Row>
       </div>
     );
   }

@@ -98,3 +98,22 @@
 .heroButton:hover {
 	color: white;
 }
+
+/* BEGIN DASHBOARD CSS */
+
+.headerDiv {
+	height: 15vh;
+}
+
+.headerLeft {
+	float: left;
+}
+
+.accountButton {
+	margin-left: 5vw;
+	float: right;
+}
+
+.centerWrapper {
+	text-align: center;
+}
