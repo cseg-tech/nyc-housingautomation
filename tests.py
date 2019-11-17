@@ -1,6 +1,7 @@
 import unittest
 import json
 import random, string
+import datetime
 from app import app 
 from app.modules import Credential
 from app.modules import MongoHelper
@@ -63,6 +64,19 @@ class AutomationTests(unittest.TestCase):
         self.assertIsNotNone(complaints[0])
         self.assertIsNotNone(complaints[1])
         # Check if closed and open complaints are both not null
+        
+    def test_find_new_complaints(self):
+        testBBL = 1019610057
+        start_date = datetime.datetime.now()
+        end_date = datetime.datetime.now() + datetime.timedelta(1)
+        start_date = start_date.strftime("%Y-%m-%d")
+        end_date = end_date.strftime("%Y-%m-%d")
+        complaints = NYCDBWrapper.findNewComplaints(testBBL, start_date, end_date)
+        print("COMPLAINTS: " , complaints)
+        self.assertIsNotNone(complaints[0])
+        self.assertIsNotNone(complaints[1])
+    # Check if closed and open complaints are both not null
+
 
     # # Begin test to check get BBL from address functionality
     def test_get_bbl(self):
