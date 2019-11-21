@@ -1,6 +1,25 @@
 import React from "react";
 import { Button, Row, Col } from "react-bootstrap";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+
+import CustomPieChart from "./CustomPieChart"
+import CustomPercentageTable from "./CustomPercentageTable"
+
+const COMPLAINT_SUMMARY = {
+  new: 10,
+  open: 50,
+  closed: 30
+};
+
+const COMPLAINT_BREAKUP = [
+{
+  "name": "Open Complaints",
+  "value": 60
+},
+{
+  "name": "Closed Complaints",
+  "value": 40
+}];
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -62,14 +81,14 @@ export default class Dashboard extends React.Component {
             <div className="complaintDiv">
               <div className="upperPortion">
                 <Row>
-                  <Col>
+                  <Col sm={6}>
                     <div className="centerWrapper">
-                      <h4>Heading here</h4>
+                      <CustomPercentageTable data={COMPLAINT_SUMMARY} title={"Complaint Data"} />
                     </div>
                   </Col>
-                  <Col>
+                  <Col sm={4}>
                     <div className="centerWrapper">
-                      <h4>Pie chart here</h4>
+                      <CustomPieChart pieData={COMPLAINT_BREAKUP} title={"Complaint Breakup"} />
                     </div>
                   </Col>
                 </Row>

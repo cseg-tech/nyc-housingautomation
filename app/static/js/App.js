@@ -5,7 +5,7 @@ import Cookies from 'js-cookie'
 import Dashboard from "./components/Dashboard";
 import HomePage from "./components/HomePage";
 
-import "./styles/HomePage.css"
+import "./styles/Master.css"
 
 
 export default class App extends React.Component {
