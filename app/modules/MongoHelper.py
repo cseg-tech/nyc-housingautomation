@@ -8,6 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import requests
 import urllib
 import json
+import datetime
 import string, random, requests, hashlib
 
 # Custom packages
@@ -107,6 +108,18 @@ def getUIDComplaints(db, col, user_id):
         return result
     return "No Complaints Found"
 
+#get complaints for a given user based on the current date 
+def getUIDNewComplaints(db, col, user_id):
+    cursor = col.find({'id' : user_id})
+    start_date = datetime.datetime.now()
+    end_date = datetime.datetime.now() + datetime.timedelta(1)
+    start_date = start_date.strftime("%m/%d/%Y")
+    end_date = end_date.strftime("%m/%d/%Y")
+    for x in cursor:
+        bbl = x['bbl']
+        result = NYCDBWrapper.findNewComplaints(bbl, start_date, end_date)
+        return result
+    return "No Complaints Found"
 
 #get address for a given user ID
 def getAddress(db, col, UID):
