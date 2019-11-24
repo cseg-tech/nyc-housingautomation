@@ -1,4 +1,5 @@
 import json
+import datetime
 import urllib.request
 import requests
 from ..modules import Credential as Credential
@@ -28,17 +29,23 @@ def cleanComplaints(complaintData):
 	
 def findAllComplaints(bbl):
     token = Credential.get_nycdb_token()
-    url = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?$$app_token={}&&bbl={}".format(token,bbl)
+    url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$$app_token={}&&bbl={}".format(token,bbl)
     with urllib.request.urlopen(url) as r:
     	data = json.loads(r.read().decode(r.info().get_param('charset') or	 'utf-8'))
     return cleanComplaints(data)
 
+def findDailyComplaints(bbl):
+	start_date = datetime.datetime.now()
+	end_date = datetime.datetime.now() + datetime.timedelta(1)
+	start_date = start_date.strftime("%Y-%m-%d")
+	end_date = end_date.strftime("%Y-%m-%d")
+	start_date += "T00:00:00"
+	end_date += "T00:00:00"
+	findNewComplaints(bbl, start_date, end_date)
+ 
 def findNewComplaints(bbl, start_date, end_date):
     token = Credential.get_nycdb_token()
-    start_date += "T00:00:00"
-    end_date += "T00:00:00"
-    url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$$app_token={}&&bbl={}&&where=created_date between '{}' and '{}'".format(token,bbl,start_date, end_date)
-    print("URL:" ,url)
+    url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$$app_token={}&&$where=created_date%20between%20%27{}%27%20and%20%27{}%27&&bbl={}".format(token,start_date, end_date, bbl)
     with urllib.request.urlopen(url) as r:
     	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
     return cleanComplaints(data)
@@ -47,10 +54,8 @@ def getBBL(building, street, borough):
 	appID = Credential.get_nyc_appID()
 	appKey = Credential.get_nyc_appKey()
 	formatString = 'https://api.cityofnewyork.us/geoclient/v1/address.json?houseNumber='+building+'&street='+street+'&borough='+borough+'&app_id='+appID+'&app_key='+appKey;
-	print(formatString)
 	resp = requests.get(url=formatString)
 	data = resp.json() # Check the JSON Response Content documentation below
-	print(data['address']['bbl'])
 	return (data['address']['bbl'])
 
 
