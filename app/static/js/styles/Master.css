@@ -1,3 +1,6 @@
+.dash {
+	overflow: hidden;
+}
 .hero {
 	height: 100vh;
 	width: 100vw;
@@ -131,4 +134,19 @@
   width: 350px;
   border-radius: 50px;
   border: 1px solid #333;
+}
+
+.comp {
+	text-align: center;
+	width: 20vw;
+  height: 30vh;
+	border-radius: 10px;
+	overflow-y: auto;
+	border-width: 1px;
+	border: solid black;
+	overflow-x: hidden;
+}
+
+.buttons {
+	text-align: center;
 }
