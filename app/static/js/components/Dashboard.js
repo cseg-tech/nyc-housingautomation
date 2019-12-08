@@ -58,27 +58,40 @@ export default class Dashboard extends React.Component {
     console.log(this.state);
     let {open_complaints, closed_complaints, address, num_complaints} = this.state;
     return (
-      <div>
+      <div className="dash">
         <Row>
+
           <Col sm={2}>
             <h3 style={{textAllign:"center"}}>70 Morningside drive</h3>
+            <div className="buttons">
             <Button style={{textAllign:"center"}} variant="primary" >Change Building</Button>
+            </div>
             <br />
+            <div className="buttons">
             <Button style={{textAllign:"center"}} variant="primary" >Edit Noficiations</Button>
+            </div>
             <br />
+            <div className="buttons">
             <Button style={{textAllign:"center"}} variant="primary" onClick={this.props.signOut}>Logout</Button>
+            </div>
             <br />
             <a href="https://portal.311.nyc.gov/article/?kanumber=KA-01082" class="complain">Complain!</a>
           </Col>
+
           <Col sm={10}>
+
             <div className="headerDiv">
+
               <div className="headerLeft">
                 <h3>{num_complaints} Complaints</h3>
                 <h4>{address}</h4>
               </div>
+
               <Button className="accountButton">Account</Button>
             </div>
+
             <div className="complaintDiv">
+
               <div className="upperPortion">
                 <Row>
                   <Col sm={6}>
@@ -93,37 +106,47 @@ export default class Dashboard extends React.Component {
                   </Col>
                 </Row>
               </div>
+
               <div className="lowerPortion">
                 <Row>
                   <Col>
                     <div className="centerWrapper">
                       <h4>Admin here</h4>
+                        <div className="comp">
+                        <h4>Open Complaints</h4>
+                        {
+                          open_complaints.map((complaint) => (
+                            <p>{JSON.stringify(complaint)}</p>
+                          ))
+                        }
+                        </div>
                     </div>
                   </Col>
                   <Col>
                     <div className="centerWrapper">
                       <h4>Env here</h4>
-                    </div>
+                        <div className="comp">
+                        <h4>Closed Complaints</h4>
+                        {
+                          closed_complaints.map((complaint) => (
+                            <p>{JSON.stringify(complaint)}</p>
+                          ))
+                        }
+                        </div>
+                     </div>
                   </Col>
                   <Col>
                     <div className="centerWrapper">
                       <h4>Safety here</h4>
+                        <div className="comp">
+                        <h4>Placeholder</h4>
+                        </div>
                     </div>
                   </Col>
                 </Row>
               </div>
-              <h4>Open Complaints</h4>
-              {
-                open_complaints.map((complaint) => (
-                  <p>{JSON.stringify(complaint)}</p>
-                ))
-              }
-              <h4>Closed Complaints</h4>
-              {
-                closed_complaints.map((complaint) => (
-                  <p>{JSON.stringify(complaint)}</p>
-                ))
-              }
+
+
             </div>
           </Col>
         </Row>
