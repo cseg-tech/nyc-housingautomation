@@ -44,11 +44,13 @@ def findDailyComplaints(bbl):
 	findNewComplaints(bbl, start_date, end_date)
  
 def findNewComplaints(bbl, start_date, end_date):
-    token = Credential.get_nycdb_token()
-    url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$$app_token={}&&$where=created_date%20between%20%27{}%27%20and%20%27{}%27&&bbl={}".format(token,start_date, end_date, bbl)
-    with urllib.request.urlopen(url) as r:
-    	data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
-    return cleanComplaints(data)
+	token = Credential.get_nycdb_token()
+	url = "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$$app_token={}&&$where=created_date%20between%20%27{}%27%20and%20%27{}%27&&bbl={}".format(token,start_date, end_date, bbl)
+	print(url)
+	with urllib.request.urlopen(url) as r:
+		data = json.loads(r.read().decode(r.info().get_param('charset') or 'utf-8'))
+
+	return cleanComplaints(data)
 
 def getBBL(building, street, borough):
 	appID = Credential.get_nyc_appID()
