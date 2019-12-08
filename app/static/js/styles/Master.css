@@ -101,6 +101,14 @@
 
 /* BEGIN DASHBOARD CSS */
 
+.leftSection {
+
+}
+
+.rightSection {
+	
+}
+
 .headerDiv {
 	height: 15vh;
 }
@@ -131,4 +139,9 @@
   width: 350px;
   border-radius: 50px;
   border: 1px solid #333;
+}
+
+.card {
+	overflow-y: scroll;
+	height: 50vh;
 }

@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 import CustomPieChart from "./CustomPieChart"
 import CustomPercentageTable from "./CustomPercentageTable"
+import Card from "./Card"
 
 const COMPLAINT_SUMMARY = {
   new: 10,
@@ -60,7 +61,7 @@ export default class Dashboard extends React.Component {
     return (
       <div>
         <Row>
-          <Col sm={2}>
+          <Col sm={2} className="leftSection">
             <h3 style={{textAllign:"center"}}>70 Morningside drive</h3>
             <Button style={{textAllign:"center"}} variant="primary" >Change Building</Button>
             <br />
@@ -70,7 +71,7 @@ export default class Dashboard extends React.Component {
             <br />
             <a href="https://portal.311.nyc.gov/article/?kanumber=KA-01082" class="complain">Complain!</a>
           </Col>
-          <Col sm={10}>
+          <Col sm={10} className="rightSection">
             <div className="headerDiv">
               <div className="headerLeft">
                 <h3>{num_complaints} Complaints</h3>
@@ -95,35 +96,17 @@ export default class Dashboard extends React.Component {
               </div>
               <div className="lowerPortion">
                 <Row>
-                  <Col>
-                    <div className="centerWrapper">
-                      <h4>Admin here</h4>
-                    </div>
+                  <Col sm={4}>
+                    <Card header="Administrative" data={closed_complaints} />
                   </Col>
-                  <Col>
-                    <div className="centerWrapper">
-                      <h4>Env here</h4>
-                    </div>
+                  <Col sm={4}>
+                    <Card header="Environmental" data={closed_complaints} />
                   </Col>
-                  <Col>
-                    <div className="centerWrapper">
-                      <h4>Safety here</h4>
-                    </div>
+                  <Col sm={4}>
+                    <Card header="Safety" data={closed_complaints} />
                   </Col>
                 </Row>
               </div>
-              <h4>Open Complaints</h4>
-              {
-                open_complaints.map((complaint) => (
-                  <p>{JSON.stringify(complaint)}</p>
-                ))
-              }
-              <h4>Closed Complaints</h4>
-              {
-                closed_complaints.map((complaint) => (
-                  <p>{JSON.stringify(complaint)}</p>
-                ))
-              }
             </div>
           </Col>
         </Row>
