@@ -40,7 +40,7 @@ key = Credential.get_sg_key()
 def DB_remove_user(col, email):
     cursor = col.find({'email': email})
     for x in cursor:
-        print("removing email")
+        # print("removing email")
         col.delete_one({"email": email})
         break
 
@@ -54,7 +54,7 @@ def DB_login_user(db, col, email, password, statusCode):
     
     statusCode = "2" #email doesnt exist
     for x in cursor:
-        print("iterating through cursor")
+        # print("iterating through cursor")
         if x:
             id_save = x['id']
             y = x['password']
@@ -67,8 +67,9 @@ def DB_login_user(db, col, email, password, statusCode):
             else:
                 statusCode = "1"# wrong pass
         break
-    
-    resultJson = jsonify({"valid" : result, "status":statusCode, 'id':id_save})
+    result = {"valid" : result, "status":statusCode, 'id':id_save}
+    # print(result)
+    resultJson = jsonify(result)
 
     return resultJson
 
@@ -79,12 +80,12 @@ def DB_register_user(db, col, id, email, password, address, bbl, statusCode):
     #Connect to DB and insert, and then change the values of result and status code accordingly
 
     # Status code == 1 implies that an id with that email already exists
-    print(email)
+    # print(email)
     cursor = col.find({'email': email})
     for x in cursor:
-        print("iterating through cursor")
+        # print("iterating through cursor")
         if x:
-            print("register user failed or exists")
+            # print("register user failed or exists")
             statusCode = "1"
             resultJson = jsonify({"valid" : result, "status" : statusCode})
             return resultJson
@@ -92,7 +93,7 @@ def DB_register_user(db, col, id, email, password, address, bbl, statusCode):
     result = 1
     emailList = [email]
     col.insert_one({'email': email, 'password': password, 'address': address, 'id': id, 'bbl':bbl})
-    print("user inserted into database")
+    # print("user inserted into database")
     #test sendgrind
     Communications.send_email(key, emailList, 'Successful Registration', 'Thank you for signing up to HousingAlertNYC!')
     

@@ -7,6 +7,7 @@ from app.modules import Credential
 from app.modules import MongoHelper
 from app.modules import NYCDBWrapper
 from flask import Flask, current_app
+import hashlib
 
 db, col = MongoHelper.init_Mongo()
 
@@ -36,12 +37,20 @@ class AutomationTests(unittest.TestCase):
     def test_login(self):
         sample_login = Credential.getSampleLogin()
         sample_pass = Credential.getSamplePassword()
+
+        hasher = hashlib.sha256()
+        hasher.update(sample_pass.encode('utf8'))
+        sample_pass = hasher.digest()
+
         with self.APP.app_context():
-            result = MongoHelper.DB_login_user(db, col, sample_login, sample_pass, 0).get_json()
+            result = MongoHelper.DB_login_user(db, col, sample_login, sample_pass, "0").get_json()
+            # print(result)
             self.assertEqual(result["status"], '0')
-            result = MongoHelper.DB_login_user(db, col, "notanemail", sample_pass, 0).get_json()
+            result = MongoHelper.DB_login_user(db, col, "notanemail", sample_pass, "0").get_json()
+            # print(result)
             self.assertEqual(result["status"], '2')
-            result = MongoHelper.DB_login_user(db, col, sample_login, sample_pass + "wrongpass", 0).get_json()
+            result = MongoHelper.DB_login_user(db, col, sample_login, "wrongpass", "0").get_json()
+            # print(result)
             self.assertEqual(result["status"], '1')
 
     # Begin test to check signup functionality
@@ -76,7 +85,6 @@ class AutomationTests(unittest.TestCase):
 
     # # Begin test to check get BBL from address functionality
     def test_get_bbl(self):
-
         # Call NYCDBWrapper.getBBL(housenum, street, borough) and check that the return value is not null for the below inputs
         house_num = "70"
         street = "Morningside Drive"
@@ -87,6 +95,8 @@ class AutomationTests(unittest.TestCase):
     # Begin test to check email functionality
     def test_send_email(self):
         return True
+    
+
 
     # ENDREGION - Unit Tests
 
