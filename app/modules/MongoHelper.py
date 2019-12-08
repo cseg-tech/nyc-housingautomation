@@ -8,6 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 import requests
 import urllib
 import json
+import datetime
 import string, random, requests, hashlib
 
 # Custom packages
@@ -35,11 +36,33 @@ def init_Mongo():
 #get sendgrid key
 key = Credential.get_sg_key()
 
+def iterate_all_users(db, col):
+    
+    returnData = {}
+
+    for x in col.find():
+
+        complaints = getUIDNewComplaints(db, col, x)
+        if complaints:
+            open_complaints = complaints[0]
+            closed_complaints = complaints[1]
+            number = complaints[2]
+
+            emaillist = list(x['email'])
+
+            returnData["open_complaints"] = open_complaints
+            returnData["closed_complaints"] = closed_complaints
+            returnData["number"] = number
+
+        if returnData:
+            Communications.send_email(key, emaillist, '311 Notification – New Complaint(s) Filed', returnData)
+
+
 #remove user from database (only for unit testing purposes)
 def DB_remove_user(col, email):
     cursor = col.find({'email': email})
     for x in cursor:
-        print("removing email")
+        # print("removing email")
         col.delete_one({"email": email})
         break
 
@@ -53,7 +76,7 @@ def DB_login_user(db, col, email, password, statusCode):
     
     statusCode = "2" #email doesnt exist
     for x in cursor:
-        print("iterating through cursor")
+        # print("iterating through cursor")
         if x:
             id_save = x['id']
             y = x['password']
@@ -66,8 +89,9 @@ def DB_login_user(db, col, email, password, statusCode):
             else:
                 statusCode = "1"# wrong pass
         break
-    
-    resultJson = jsonify({"valid" : result, "status":statusCode, 'id':id_save})
+    result = {"valid" : result, "status":statusCode, 'id':id_save}
+    # print(result)
+    resultJson = jsonify(result)
 
     return resultJson
 
@@ -78,12 +102,12 @@ def DB_register_user(db, col, id, email, password, address, bbl, statusCode):
     #Connect to DB and insert, and then change the values of result and status code accordingly
 
     # Status code == 1 implies that an id with that email already exists
-    print(email)
+    # print(email)
     cursor = col.find({'email': email})
     for x in cursor:
-        print("iterating through cursor")
+        # print("iterating through cursor")
         if x:
-            print("register user failed or exists")
+            # print("register user failed or exists")
             statusCode = "1"
             resultJson = jsonify({"valid" : result, "status" : statusCode})
             return resultJson
@@ -91,7 +115,7 @@ def DB_register_user(db, col, id, email, password, address, bbl, statusCode):
     result = 1
     emailList = [email]
     col.insert_one({'email': email, 'password': password, 'address': address, 'id': id, 'bbl':bbl})
-    print("user inserted into database")
+    # print("user inserted into database")
     #test sendgrind
     Communications.send_email(key, emailList, 'Successful Registration', 'Thank you for signing up to HousingAlertNYC!')
     
@@ -107,6 +131,19 @@ def getUIDComplaints(db, col, user_id):
         return result
     return "No Complaints Found"
 
+#get complaints for a given user based on the current date 
+def getUIDNewComplaints(db, col, doc):
+    start_date = datetime.datetime.now()
+    end_date = datetime.datetime.now() + datetime.timedelta(1)
+    #start_date = start_date.strftime("%m/%d/%Y")
+    #end_date = end_date.strftime("%m/%d/%Y")
+    
+    bbl = str(doc['bbl'])
+    print(bbl)
+    result = NYCDBWrapper.findDailyComplaints(bbl)
+    return result
+
+    #return "No Complaints Found"
 
 #get address for a given user ID
 def getAddress(db, col, UID):

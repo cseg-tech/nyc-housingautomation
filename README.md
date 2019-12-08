@@ -2,7 +2,8 @@
 A notification system that alerts NYC tenants, tenant organizers, and other users who sign up for the service whenever a housing complaint is filed in their building.
 
 ## Project Details
-Please find this project's scope document and other details <a href="https://github.com/cseg-tech/nyc-housingautomation/blob/master/docs/ProjectScope.md">here</a>
+Please find this project's scope document and other details <a href="https://github.com/cseg-tech/nyc-housingautomation/blob/master/docs/ProjectScope.md">here</a><br>
+This project is staged <a href="https://nychousingalert.herokuapp.com/">here</a>
 
 ## Requirements
 This project requires both Python, and NodeJS to run. The backend has been built in Flask, which is dependant on Python3.6, while the frontend is built in ReactJS, and requires either npm or yarn to install the required packages.

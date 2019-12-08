@@ -1,3 +1,6 @@
+.dash {
+	overflow: hidden;
+}
 .hero {
 	height: 100vh;
 	width: 100vw;
@@ -85,4 +88,73 @@
 
 .heroURL:hover {
 	color: white;
+}
+
+.heroButton {
+	padding-left: 1vw;
+	padding-right: 1vw;
+	text-decoration: none;
+	background-color: none;
+	color: white;
+}
+
+.heroButton:hover {
+	color: white;
+}
+
+/* BEGIN DASHBOARD CSS */
+
+.leftSection {
+
+}
+
+.rightSection {
+	
+}
+
+.headerDiv {
+	height: 15vh;
+}
+
+.headerLeft {
+	float: left;
+}
+
+.accountButton {
+	margin-left: 5vw;
+	float: right;
+}
+
+.centerWrapper {
+	text-align: center;
+}
+
+.progressBar {
+  background: #1DA598;
+  height: 100%;
+  border-radius: inherit;
+  transition: width .2s ease-in;
+}
+
+.wrapBar {
+  position: relative;
+  height: 20px;
+  width: 350px;
+  border-radius: 50px;
+  border: 1px solid #333;
+}
+
+.comp {
+	text-align: center;
+	width: 20vw;
+  height: 50vh;
+	border-radius: 10px;
+	overflow-y: auto;
+	border-width: 1px;
+	border: solid black;
+	overflow-x: hidden;
+}
+
+.buttons {
+	text-align: center;
 }
