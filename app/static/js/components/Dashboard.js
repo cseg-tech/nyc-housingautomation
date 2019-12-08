@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 import CustomPieChart from "./CustomPieChart"
 import CustomPercentageTable from "./CustomPercentageTable"
+import Card from "./Card"
 
 const COMPLAINT_SUMMARY = {
   new: 10,
@@ -60,8 +61,7 @@ export default class Dashboard extends React.Component {
     return (
       <div className="dash">
         <Row>
-
-          <Col sm={2}>
+          <Col sm={2} className="leftSection">
             <h3 style={{textAllign:"center"}}>70 Morningside drive</h3>
             <div className="buttons">
             <Button style={{textAllign:"center"}} variant="primary" >Change Building</Button>
@@ -77,9 +77,7 @@ export default class Dashboard extends React.Component {
             <br />
             <a href="https://portal.311.nyc.gov/article/?kanumber=KA-01082" class="complain">Complain!</a>
           </Col>
-
-          <Col sm={10}>
-
+          <Col sm={10} className="rightSection">
             <div className="headerDiv">
 
               <div className="headerLeft">

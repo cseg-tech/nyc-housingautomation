@@ -104,6 +104,14 @@
 
 /* BEGIN DASHBOARD CSS */
 
+.leftSection {
+
+}
+
+.rightSection {
+	
+}
+
 .headerDiv {
 	height: 15vh;
 }
@@ -139,7 +147,7 @@
 .comp {
 	text-align: center;
 	width: 20vw;
-  height: 30vh;
+  height: 50vh;
 	border-radius: 10px;
 	overflow-y: auto;
 	border-width: 1px;
