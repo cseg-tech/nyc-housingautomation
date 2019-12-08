@@ -36,6 +36,28 @@ def init_Mongo():
 #get sendgrid key
 key = Credential.get_sg_key()
 
+def iterate_all_users(db, col):
+    
+    returnData = {}
+
+    for x in col.find():
+
+        complaints = getUIDNewComplaints(db, col, x)
+        if complaints:
+            open_complaints = complaints[0]
+            closed_complaints = complaints[1]
+            number = complaints[2]
+
+            emaillist = list(x['email'])
+
+            returnData["open_complaints"] = open_complaints
+            returnData["closed_complaints"] = closed_complaints
+            returnData["number"] = number
+
+        if returnData:
+            Communications.send_email(key, emaillist, '311 Notification – New Complaint(s) Filed', returnData)
+
+
 #remove user from database (only for unit testing purposes)
 def DB_remove_user(col, email):
     cursor = col.find({'email': email})
@@ -109,17 +131,18 @@ def getUIDComplaints(db, col, user_id):
     return "No Complaints Found"
 
 #get complaints for a given user based on the current date 
-def getUIDNewComplaints(db, col, user_id):
-    cursor = col.find({'id' : user_id})
+def getUIDNewComplaints(db, col, doc):
     start_date = datetime.datetime.now()
     end_date = datetime.datetime.now() + datetime.timedelta(1)
-    start_date = start_date.strftime("%m/%d/%Y")
-    end_date = end_date.strftime("%m/%d/%Y")
-    for x in cursor:
-        bbl = x['bbl']
-        result = NYCDBWrapper.findNewComplaints(bbl, start_date, end_date)
-        return result
-    return "No Complaints Found"
+    #start_date = start_date.strftime("%m/%d/%Y")
+    #end_date = end_date.strftime("%m/%d/%Y")
+    
+    bbl = str(doc['bbl'])
+    print(bbl)
+    result = NYCDBWrapper.findDailyComplaints(bbl)
+    return result
+
+    #return "No Complaints Found"
 
 #get address for a given user ID
 def getAddress(db, col, UID):

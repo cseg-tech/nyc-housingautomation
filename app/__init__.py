@@ -9,7 +9,7 @@ import json
 # Imported packages
 from sendgrid.helpers.mail import Mail
 from pymongo import MongoClient
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from sendgrid import SendGridAPIClient
 
 # Custom modules
@@ -37,21 +37,16 @@ mongo = PyMongo(app)'''
 #get sendgrid key
 key = Credential.get_sg_key()
 
-'''
+
 sg_key = Credential.get_sg_key()
 
 def cron_job():
 	# Query each user, find out if anyone else has lodged complaints for thier BBL - if so, email them.
-	emailNeeded = True
-	if(emailNeeded):
-		print("sending...")
-		to = "example@email.com"
-		content = "Hi"	
-		send_mail(sg_key, to, content)
+	MongoHelper.iterate_all_users(db, col)
 
-scheduler = BlockingScheduler()
+scheduler = BackgroundScheduler()
 scheduler.add_job(cron_job, 'interval', hours=24)
-scheduler.start()'''
+scheduler.start()
 #Ref: https://stackoverflow.com/questions/22715086/scheduling-python-script-to-run-every-hour-accurately
 
 
@@ -192,3 +187,4 @@ def getURL():
 	myKey = Credential.get_places_key()
 	apiString = "https://maps.googleapis.com/maps/api/js?v=3.exp&key={keyVal}&sensor=false&libraries=places".format(keyVal=myKey)
 	return apiString
+
