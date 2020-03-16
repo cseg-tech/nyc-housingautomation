@@ -67,36 +67,33 @@ def DB_remove_user(col, email):
         break
 
 #login user to database
-def DB_login_user(db, col, email, password, statusCode):
-    #Connect to DB and insert, and then change the values of result and status code accordingly
+def DB_login_user(db, col, email, password):
+    '''
+    Connect to DB and insert, and then change the values of result and status code accordingly
+    Status Codes: 0 => success, 1=> invalid password, 2=> invalid email
+    '''
     result = 0
-    cursor = col.find({'email': email})
+    cursor = col.find_one({'email': email})
     
-    id_save = 00000
-    
-    statusCode = "2" #email doesnt exist
-    for x in cursor:
-        # print("iterating through cursor")
-        if x:
-            id_save = x['id']
-            y = x['password']
-            emailList = [x['email']]
-            if password == y:
-                statusCode = "0" # success
-                #test sendgrind
-                Communications.send_email(key, emailList, 'Successful Login', 'Thanks for logging in!')
-                result = 1
-            else:
-                statusCode = "1"# wrong pass
-        break
-    result = {"valid" : result, "status":statusCode, 'id':id_save}
-    # print(result)
-    resultJson = jsonify(result)
+    statusCode = 1
+    id = None
 
-    return resultJson
+    print((list(cursor)))
+    print(len(list(cursor)))
+    if not (cursor):
+        return jsonify({"status":2, "id":None})
+
+    x = cursor
+    emailList = [x['email']]
+
+    if password==x['password']:
+        statusCode=0
+        id = x['id']
+
+    return jsonify({"status":statusCode, "id":id})
 
 #register user to database
-def DB_register_user(db, col, id, email, password, address, bbl, statusCode):
+def DB_register_user(db, col, id, email, password, address, bbl):
     result = 0
     statusCode = "0"
     #Connect to DB and insert, and then change the values of result and status code accordingly

@@ -34,9 +34,9 @@ export default class SignUpPopup extends React.Component {
     return (
       <Popup trigger={<Button className="splashButton" variant="primary" style={{marginLeft:"0.5vw"}}>Sign Up</Button>} modal>
         {close => (
-          <div className="SignUp" style={{marginLeft:"10vw", marginRight:"10vw"}}>
+          <div className="SignUp" style={{marginLeft:"10vw", marginRight:"10vw", paddingTop:"1vh", paddingBottom:"1vh"}}>
             <Form.Group controlId="email" >
-                <Form.Label>Email</Form.Label>
+                <Form.Label style={{color:"black"}}>Email</Form.Label>
                 <Form.Control
                 autoFocus
                 type="email"
@@ -45,14 +45,14 @@ export default class SignUpPopup extends React.Component {
                 />
             </Form.Group>
             <Form.Group controlId="password" >
-                <Form.Label>Password</Form.Label>
+                <Form.Label style={{color:"black"}}>Password</Form.Label>
                 <Form.Control
                 value={this.state.password}
                 onChange={e => this.setPassword(e.target.value)}
                 type="password"
                 />
             </Form.Group>
-            <Form.Group controlId="number" >
+            <Form.Group  style={{color:"black"}}controlId="number" >
                 <Form.Label>Building Number</Form.Label>
                 <Form.Control
                 value={this.state.buildingno}
@@ -61,7 +61,7 @@ export default class SignUpPopup extends React.Component {
                 />
             </Form.Group>
             <Form.Group controlId="street" >
-                <Form.Label>Street</Form.Label>
+                <Form.Label style={{color:"black"}}>Street</Form.Label>
                 <Form.Control
                 value={this.state.street}
                 onChange={e => this.setState({street: e.target.value})}
@@ -69,7 +69,7 @@ export default class SignUpPopup extends React.Component {
                 />
             </Form.Group>
             <Form.Group controlId="exampleForm.ControlSelect1">
-                <Form.Label>Borough</Form.Label>
+                <Form.Label style={{color:"black"}}>Borough</Form.Label>
                 <Form.Control as="select" value={this.state.borough} onChange={e => {this.setState({borough: e.target.value})}}>
                 <option value="manhattan">Manhattan</option>
                 <option value="brooklyn">Brooklyn</option>
@@ -77,7 +77,7 @@ export default class SignUpPopup extends React.Component {
                 <option value="queens">Queens</option>
                 </Form.Control>
             </Form.Group>
-            <Button disabled={!this.validateForm} onClick={() => {
+            <Button disabled={!this.validateForm} style={{marginRight:"0.5vw"}} onClick={() => {
               let {email, password, buildingno, street, borough} = this.state;
               let payload = {
                   email,
@@ -99,7 +99,7 @@ export default class SignUpPopup extends React.Component {
                     }
                 });
             }}>Sign Up</Button>
-            <Button onClick={this.props.back}>Back</Button>
+            <Button onClick={this.props.back} style={{marginLeft:"0.5vw"}}>Back</Button>
         </div>
         )}
       </Popup>
