@@ -55,10 +55,9 @@ export default class LoginPopup extends React.Component {
                     .then(function(response) {return response.json();})
                     .then(function(data) {
                         console.log(data);
-                        const result = data['valid']
                         const uniqueID = data['id']
                         const statusCode = data['status']
-                        if(result == 1) {
+                        if(statusCode == 0) {
                           console.log("Logging in...")
                           Cookies.set('loginToken', uniqueID);
                           that.props.triggerLogin();

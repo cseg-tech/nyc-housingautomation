@@ -61,21 +61,11 @@ def loginUser():
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
 	result = "true"
-	statusCode = "3" # Different statuses would symbolise different types of issues, while 0 would imply a successful login - used to update the frontend
 
-	resultJson = MongoHelper.DB_login_user(db, col, email, password, statusCode)
+	resultJson = MongoHelper.DB_login_user(db, col, email, password)
     
 	print(resultJson)
-
-	'''
-	Status Codes:
-	0 - Sucessful
-	1 - Wrong Password
-	2 - Email ID doesn't exist
-	3 - Unforseen error'''
 	
-	
-
 	return resultJson
 
 @app.route('/registerUser', methods=['POST'])
@@ -93,12 +83,11 @@ def registerUser():
 	hasher.update(password.encode('utf8'))
 	password = hasher.digest()
 	result = "true"
-	statusCode = "0"
 	#id_hasher = hashlib.sha256()
 	#id_hasher.update(.encode('utf8'))
 	identifier = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-	resultJson = MongoHelper.DB_register_user(db, col, identifier, email, password, address, bbl, statusCode)
+	resultJson = MongoHelper.DB_register_user(db, col, identifier, email, password, address, bbl)
 	return resultJson
 
 @app.route('/getUserStatus', methods=['POST'])

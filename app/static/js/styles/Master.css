@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .dash {
 	overflow: hidden;
 }
@@ -20,6 +24,53 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
+	opacity:0.9;
+	z-index: -2;
+}
+
+.hero2 {
+	height: 100vh;
+	width: 100vw;
+	color: white;
+	position: relative;
+}
+
+.hero2::before {
+
+	background-image: url("https://www.netimpact.org/sites/default/files/images/Empire_State_Building_Observatory_manhattan_nyc_Julienne_Schaer_055_3f39d2d1-61fd-4d1b-b931-8590bf4c63a7.jpg");
+	background-size: cover;
+	filter: brightness(35%);
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity:0.9;
+	z-index: -2;
+}
+
+.hero3 {
+	height: 100vh;
+	width: 100vw;
+	color: white;
+	position: relative;
+}
+
+.hero3::before {
+
+	background-image: url("https://news.columbia.edu/sites/default/files/styles/cu_crop/public/content/columbia-gs-alma-mater-butler-library.943x530.2.jpg?itok=KpK17OGr");
+	background-size: cover;
+	filter: brightness(35%);
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity:0.9;
 	z-index: -2;
 }
 
@@ -28,6 +79,16 @@
 	padding-top: 35vh;
 	width: 50%;
 	text-align: center;
+}
+
+.leftContent {
+	margin-left: -20vw;
+	width: 65%;
+}
+
+.rightContent {
+	margin-left: 30vw;
+	width: 65%;
 }
 
 .splashButton {
@@ -73,8 +134,29 @@
   border-right-width: 4px;
 }
 
+.arrowTop {
+  box-sizing: border-box;
+  height: 1.5vw;
+  width: 1.5vw;
+  margin: auto;
+  border-style: solid;
+  border-color: white;
+  border-width: 0px 1px 1px 0px;
+  transform: rotate(225deg);
+  transition: border-width 150ms ease-in-out;
+
+  position: absolute;
+  left: 50%;
+  top: 20;
+}
+
+.arrowTop:hover {
+  border-bottom-width: 4px;
+  border-right-width: 4px;
+}
+
 .heroTop {
-	position: absolute;
+	position: fixed;
 	top: 30;
 	right: 3%;
 }
