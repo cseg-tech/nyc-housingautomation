@@ -60,7 +60,7 @@ export default class Home extends React.Component {
       }
       return (
         <div>
-        <div className="heroTop">
+        <div className="heroTop" style={{zIndex: "100"}}>
                 {
                   this.state.loginEnable? (
                       <a href="#" onClick={this.activateDash} className="heroURL">My Dashboard</a>
