@@ -62,7 +62,7 @@ export default class Dashboard extends React.Component {
       <div className="dash">
         <Row>
           <Col sm={2} className="leftSection">
-            <h3 style={{textAllign:"center"}}>70 Morningside drive</h3>
+            <h3 className = "mainAddress">70 Morningside drive</h3>
             <div className="buttons">
             <Button style={{textAllign:"center"}} variant="primary" >Change Building</Button>
             </div>
@@ -75,16 +75,17 @@ export default class Dashboard extends React.Component {
             <Button style={{textAllign:"center"}} variant="primary" onClick={this.props.signOut}>Logout</Button>
             </div>
             <br />
-            <a href="https://portal.311.nyc.gov/article/?kanumber=KA-01082" class="complain">Complain!</a>
+            <div className="buttons">
+            <Button href = "https://portal.311.nyc.gov/article/?kanumber=KA-01082" style={{textAllign:"center"}} variant="primary">Complain!</Button>
+            </div>
           </Col>
           <Col sm={10} className="rightSection">
             <div className="headerDiv">
 
               <div className="headerLeft">
-                <h3>{num_complaints} Complaints</h3>
-                <h4>{address}</h4>
+                <h3 className="whiteHeader">{num_complaints} Complaints</h3>
+                <h4 className="whiteHeader">{address}</h4>
               </div>
-
               <Button className="accountButton">Account</Button>
             </div>
 
@@ -109,7 +110,7 @@ export default class Dashboard extends React.Component {
                 <Row>
                   <Col>
                     <div className="centerWrapper">
-                      <h4>Admin here</h4>
+                      <h4 className="categories">Admin here</h4>
                         <div className="comp">
                         <h4>Open Complaints</h4>
                         {
@@ -121,8 +122,8 @@ export default class Dashboard extends React.Component {
                     </div>
                   </Col>
                   <Col>
-                    <div className="centerWrapper">
-                      <h4>Env here</h4>
+                    <div className="centerWrapper"> 
+                      <h4 className="categories">Env here</h4>
                         <div className="comp">
                         <h4>Closed Complaints</h4>
                         {
@@ -135,7 +136,7 @@ export default class Dashboard extends React.Component {
                   </Col>
                   <Col>
                     <div className="centerWrapper">
-                      <h4>Safety here</h4>
+                      <h4 className="categories">Safety here</h4>
                         <div className="comp">
                         <h4>Placeholder</h4>
                         </div>

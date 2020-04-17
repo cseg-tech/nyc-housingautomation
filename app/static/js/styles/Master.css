@@ -4,6 +4,7 @@ html {
 
 .dash {
 	overflow: hidden;
+	height: 100%;
 }
 .hero {
 	height: 100vh;
@@ -187,15 +188,19 @@ html {
 /* BEGIN DASHBOARD CSS */
 
 .leftSection {
-
-}
-
-.rightSection {
-	
+	background-image: url("https://media.cntraveler.com/photos/5b60c975dc28180da9d6d0d3/master/pass/Brooklyn-Bridge_GettyImages-514819551.jpg");
+	background-size: cover;
+	filter: brightness(35%);
+	opacity:0.9;
+	z-index: -2;
 }
 
 .headerDiv {
-	height: 15vh;
+	height: 10vh;
+	background-image: url("https://media.cntraveler.com/photos/5b60c975dc28180da9d6d0d3/master/pass/Brooklyn-Bridge_GettyImages-514819551.jpg");
+	background-size: cover;
+	filter: brightness(35%);
+	opacity:0.9;
 }
 
 .headerLeft {
@@ -227,16 +232,31 @@ html {
 }
 
 .comp {
-	text-align: center;
+	margin: 0 auto;
 	width: 20vw;
-  height: 50vh;
-	border-radius: 10px;
+	height: 30vh;
 	overflow-y: auto;
 	border-width: 1px;
-	border: solid black;
+	border: solid rgb(197, 192, 192);
 	overflow-x: hidden;
 }
 
 .buttons {
 	text-align: center;
+	position: relative;
+	z-index: auto;
+}
+
+.mainAddress {
+	margin: 4vh;
+	text-align: center;
+	color: white;
+}
+
+.whiteHeader {
+	color: white;
+}
+
+.categories {
+	border: solid rgb(197, 192, 192);
 }
