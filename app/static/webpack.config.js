@@ -27,7 +27,7 @@ const config = {
             use: ['style-loader', 'css-loader', 'sass-loader']
           },
           {
-            test: /\.(png|svg|jpg|gif)$/,
+            test: /\.(png|svg|jpg|gif|ttf|woff|eot)$/,
             loader: "file-loader",
             // Removed a / from /static
             options: { name: 'static/[name].[ext]' }

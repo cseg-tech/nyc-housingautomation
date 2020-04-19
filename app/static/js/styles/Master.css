@@ -5,6 +5,9 @@ html {
 .dash {
 	overflow: hidden;
 	height: 100%;
+	padding-left: 10vw;
+	padding-right: 10vw;
+	padding-top: 10vh;
 }
 .hero {
 	height: 100vh;

@@ -1,10 +1,10 @@
 import React from "react";
-import { Button, Row, Col } from "react-bootstrap";
+import { Button, Row, Col, } from "react-bootstrap";
 import Cookies from 'js-cookie';
+import Header from "./Header"
 
 import CustomPieChart from "./CustomPieChart"
 import CustomPercentageTable from "./CustomPercentageTable"
-import Card from "./Card"
 
 const COMPLAINT_SUMMARY = {
   new: 10,
@@ -59,97 +59,65 @@ export default class Dashboard extends React.Component {
     console.log(this.state);
     let {open_complaints, closed_complaints, address, num_complaints} = this.state;
     return (
+      <React.Fragment>
+      <Header logout={this.props.signOut} address={address} number={num_complaints}/>
       <div className="dash">
-        <Row>
-          <Col sm={2} className="leftSection">
-            <h3 className = "mainAddress">70 Morningside drive</h3>
-            <div className="buttons">
-            <Button style={{textAllign:"center"}} variant="primary" >Change Building</Button>
-            </div>
-            <br />
-            <div className="buttons">
-            <Button style={{textAllign:"center"}} variant="primary" >Edit Noficiations</Button>
-            </div>
-            <br />
-            <div className="buttons">
-            <Button style={{textAllign:"center"}} variant="primary" onClick={this.props.signOut}>Logout</Button>
-            </div>
-            <br />
-            <div className="buttons">
-            <Button href = "https://portal.311.nyc.gov/article/?kanumber=KA-01082" style={{textAllign:"center"}} variant="primary">Complain!</Button>
-            </div>
-          </Col>
-          <Col sm={10} className="rightSection">
-            <div className="headerDiv">
-
-              <div className="headerLeft">
-                <h3 className="whiteHeader">{num_complaints} Complaints</h3>
-                <h4 className="whiteHeader">{address}</h4>
-              </div>
-              <Button className="accountButton">Account</Button>
-            </div>
-
-            <div className="complaintDiv">
-
-              <div className="upperPortion">
-                <Row>
+        <div className="complaintDiv">
+            <div className="upperPortion">
+              <Row>
                   <Col sm={6}>
-                    <div className="centerWrapper">
-                      <CustomPercentageTable data={COMPLAINT_SUMMARY} title={"Complaint Data"} />
-                    </div>
+                  <div className="centerWrapper">
+                    <CustomPercentageTable data={COMPLAINT_SUMMARY} title={"Complaint Data"} />
+                  </div>
                   </Col>
                   <Col sm={4}>
-                    <div className="centerWrapper">
-                      <CustomPieChart pieData={COMPLAINT_BREAKUP} title={"Complaint Breakup"} />
-                    </div>
+                  <div className="centerWrapper">
+                    <CustomPieChart pieData={COMPLAINT_BREAKUP} title={"Complaint Breakup"} />
+                  </div>
                   </Col>
-                </Row>
-              </div>
-
-              <div className="lowerPortion">
-                <Row>
+              </Row>
+            </div>
+            <div className="lowerPortion">
+              <Row>
                   <Col>
-                    <div className="centerWrapper">
-                      <h4 className="categories">Admin here</h4>
-                        <div className="comp">
+                  <div className="centerWrapper">
+                    <h4 className="categories">Admin here</h4>
+                    <div className="comp">
                         <h4>Open Complaints</h4>
                         {
-                          open_complaints.map((complaint) => (
-                            <p>{JSON.stringify(complaint)}</p>
-                          ))
+                        open_complaints.map((complaint) => (
+                        <p>{JSON.stringify(complaint)}</p>
+                        ))
                         }
-                        </div>
                     </div>
+                  </div>
                   </Col>
                   <Col>
-                    <div className="centerWrapper"> 
-                      <h4 className="categories">Env here</h4>
-                        <div className="comp">
+                  <div className="centerWrapper">
+                    <h4 className="categories">Env here</h4>
+                    <div className="comp">
                         <h4>Closed Complaints</h4>
                         {
-                          closed_complaints.map((complaint) => (
-                            <p>{JSON.stringify(complaint)}</p>
-                          ))
+                        closed_complaints.map((complaint) => (
+                        <p>{JSON.stringify(complaint)}</p>
+                        ))
                         }
-                        </div>
-                     </div>
+                    </div>
+                  </div>
                   </Col>
                   <Col>
-                    <div className="centerWrapper">
-                      <h4 className="categories">Safety here</h4>
-                        <div className="comp">
+                  <div className="centerWrapper">
+                    <h4 className="categories">Safety here</h4>
+                    <div className="comp">
                         <h4>Placeholder</h4>
-                        </div>
                     </div>
+                  </div>
                   </Col>
-                </Row>
-              </div>
-
-
+              </Row>
             </div>
-          </Col>
-        </Row>
+        </div>
       </div>
+      </React.Fragment>
     );
   }
 }
