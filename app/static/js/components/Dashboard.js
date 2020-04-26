@@ -66,12 +66,12 @@ export default class Dashboard extends React.Component {
             <div className="upperPortion">
               <Row>
                   <Col sm={6}>
-                  <div className="centerWrapper">
+                  <div className="chart">
                     <CustomPercentageTable data={COMPLAINT_SUMMARY} title={"Complaint Data"} />
                   </div>
                   </Col>
                   <Col sm={4}>
-                  <div className="centerWrapper">
+                  <div className="chart">
                     <CustomPieChart pieData={COMPLAINT_BREAKUP} title={"Complaint Breakup"} />
                   </div>
                   </Col>

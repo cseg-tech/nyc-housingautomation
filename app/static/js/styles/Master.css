@@ -188,6 +188,16 @@ html {
 	color: white;
 }
 
+/* CHART CSS */
+
+.pieDiv {
+	text-align: center;
+}
+
+.charts {
+	border: solid rgb(197, 192, 192);
+}
+
 /* BEGIN DASHBOARD CSS */
 
 .leftSection {
