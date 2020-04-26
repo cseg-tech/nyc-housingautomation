@@ -5,6 +5,7 @@ import Header from "./Header"
 
 import CustomPieChart from "./CustomPieChart"
 import CustomPercentageTable from "./CustomPercentageTable"
+import ComplaintCard from "./ComplaintCard"
 
 const COMPLAINT_SUMMARY = {
   new: 10,
@@ -80,38 +81,13 @@ export default class Dashboard extends React.Component {
             <div className="lowerPortion">
               <Row>
                   <Col>
-                  <div className="centerWrapper">
-                    <h4 className="categories">Admin here</h4>
-                    <div className="comp">
-                        <h4>Open Complaints</h4>
-                        {
-                        open_complaints.map((complaint) => (
-                        <p>{JSON.stringify(complaint)}</p>
-                        ))
-                        }
-                    </div>
-                  </div>
+                    <ComplaintCard header={"Administrative"} data={open_complaints} />
                   </Col>
                   <Col>
-                  <div className="centerWrapper">
-                    <h4 className="categories">Env here</h4>
-                    <div className="comp">
-                        <h4>Closed Complaints</h4>
-                        {
-                        closed_complaints.map((complaint) => (
-                        <p>{JSON.stringify(complaint)}</p>
-                        ))
-                        }
-                    </div>
-                  </div>
+                    <ComplaintCard header={"Environmental"} data={closed_complaints} />
                   </Col>
                   <Col>
-                  <div className="centerWrapper">
-                    <h4 className="categories">Safety here</h4>
-                    <div className="comp">
-                        <h4>Placeholder</h4>
-                    </div>
-                  </div>
+                  <ComplaintCard header={"Safety"} data={closed_complaints} />
                   </Col>
               </Row>
             </div>

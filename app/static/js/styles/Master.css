@@ -273,3 +273,7 @@ html {
 .categories {
 	border: solid rgb(197, 192, 192);
 }
+
+.lowerPortion {
+	margin-top: 10vh;
+}
