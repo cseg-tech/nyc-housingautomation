@@ -192,10 +192,25 @@ html {
 
 .pieDiv {
 	text-align: center;
+	border: solid 1px rgb(197, 192, 192);
+	padding: 3vh;
+	width: 39vw;
+	border-radius: 3px;
+	background-color: rgb(248, 249, 250)
 }
 
 .charts {
 	border: solid rgb(197, 192, 192);
+}
+
+.pTable {
+	border: solid rgb(197, 192, 192);
+	margin: 3vh;
+}
+
+.innerPieDiv {
+	border: solid rgb(197, 192, 192);
+	margin: 3vh;
 }
 
 /* BEGIN DASHBOARD CSS */
@@ -229,19 +244,34 @@ html {
 	text-align: center;
 }
 
-.progressBar {
-  background: #1DA598;
-  height: 100%;
-  border-radius: inherit;
-  transition: width .2s ease-in;
+.progressBarS {
+	background: #f8ff36;
+	height: 100%;
+	border-radius: inherit;
+	transition: width .2s ease-in;
+	text-align: center;
+}
+.progressBarA {
+	background: #0f16d6;
+	height: 100%;
+	border-radius: inherit;
+	transition: width .2s ease-in;
+	text-align: center;
 }
 
+.progressBarE {
+	background: #64d983;
+	height: 100%;
+	border-radius: inherit;
+	transition: width .2s ease-in;
+	text-align: center;
+}
 .wrapBar {
-  position: relative;
-  height: 20px;
-  width: 350px;
-  border-radius: 50px;
-  border: 1px solid #333;
+  	position: relative;
+  	height: 20px;
+  	width: 350px;
+  	border-radius: 50px;
+  	border: 1px solid #333;
 }
 
 .comp {
@@ -275,5 +305,5 @@ html {
 }
 
 .lowerPortion {
-	margin-top: 10vh;
+	margin-top: 5vh;
 }

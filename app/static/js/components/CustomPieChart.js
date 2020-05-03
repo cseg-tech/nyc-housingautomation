@@ -27,9 +27,10 @@ export default class CustomPieChart extends React.Component {
 	render() {
 		const {pieData, title} = this.props;
 		return (
-			<div className="pieDiv">
+			<div className="pieDiv" bg="light">
 				<h3>{title}</h3>
-				<PieChart width={730} height={250}>
+				<div className = "innerPieDiv">
+				<PieChart width={450} height={250} >
 					<Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} fill={PIECOLOR} labelLine={false} label={renderLabel}>
 						{
 					      pieData.map((entry, index) => (
@@ -38,6 +39,7 @@ export default class CustomPieChart extends React.Component {
 					    }
 					</Pie>
 				</PieChart>
+				</div>
 			</div>
 			);
 	}
