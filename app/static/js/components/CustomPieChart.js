@@ -30,8 +30,8 @@ export default class CustomPieChart extends React.Component {
 			<div className="pieDiv" bg="light">
 				<h3>{title}</h3>
 				<div className = "innerPieDiv">
-				<PieChart width={450} height={250} >
-					<Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} fill={PIECOLOR} labelLine={false} label={renderLabel}>
+				<PieChart width={450} height={168} >
+					<Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill={PIECOLOR} labelLine={false} label={renderLabel}>
 						{
 					      pieData.map((entry, index) => (
 					        <Cell key={`cell-${index}`} fill={COLORS[index]}/>
