@@ -61,5 +61,16 @@ def getBBL(building, street, borough):
 	return (data['address']['bbl'])
 
 
+def sortComplaints(complaints, keywords):
+    # complaints is a list of all the complaints, open_complaints and closed_complaints from cleanComplaints()
+    # keywords is a list of 3 lists, keywords[0] is the list of Administrative keywords, 1- Environmental, 2- Safety.
+    toReturn = [[],[],[]]
+    for complaint in complaints:
+        for i, category in enumerate(keywords):
+            for keyword in category:
+                if keyword in complaint['Description']:
+                    toReturn[i].append(complaint)
+    return toReturn 
+    
 def getSameComplaints(user_id):
     return None

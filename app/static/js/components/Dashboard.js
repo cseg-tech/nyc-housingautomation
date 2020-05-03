@@ -81,13 +81,13 @@ export default class Dashboard extends React.Component {
             <div className="lowerPortion">
               <Row>
                   <Col>
-                    <ComplaintCard header={"Administrative"} data={open_complaints} />
+                    <ComplaintCard header={"Administrative"} data={Administrative} />
                   </Col>
                   <Col>
-                    <ComplaintCard header={"Environmental"} data={closed_complaints} />
+                    <ComplaintCard header={"Environmental"} data={Environmental} />
                   </Col>
                   <Col>
-                  <ComplaintCard header={"Safety"} data={closed_complaints} />
+                  <ComplaintCard header={"Safety"} data={Safety} />
                   </Col>
               </Row>
             </div>

@@ -74,6 +74,15 @@ class AutomationTests(unittest.TestCase):
         self.assertIsNotNone(complaints[1])
         # Check if closed and open complaints are both not null
         
+    def test_complaint_sort(self):
+        testBBL = 1019610057
+        complaints = NYCDBWrapper.findAllComplaints(testBBL)
+        complaints[0].extend(complaints[1])
+        print(complaints[0])
+        keywords = [['Administrative'],['Environmental'],['Safety']]
+        sorted_complaints = NYCDBWrapper.sortComplaints(complaints[0],keywords)
+        self.assertIsNotNone(sorted_complaints)
+        
     def test_find_new_complaints(self):
         testBBL = 1019610057
         start_date = "2010-01-22T16:04:13"
