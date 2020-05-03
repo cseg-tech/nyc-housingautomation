@@ -117,12 +117,22 @@ def getBBLDetails():
 	open_complaints = complaints[0]
 	closed_complaints = complaints[1]
 	number = complaints[2]
-
+ 
+	keywords = [['Administrative'],['Environmental'],['Safety']]
+ 
 	returnData = {}
 	returnData["address"] = address
 	returnData["open_complaints"] = open_complaints
 	returnData["closed_complaints"] = closed_complaints
 	returnData["number"] = number
+ 
+	allComplaints = open_complaints
+	allComplaints.extend(closed_complaints)
+	sortedComplaints = NYCDBWrapper.sortComplaints(allComplaints, keywords)
+	returnData["Administrative"] = sortedComplaints[0]
+	returnData["Environmental"] = sortedComplaints[1]
+	returnData["Safety"] = sortedComplaints[2]
+	
 
 	return returnData
 
