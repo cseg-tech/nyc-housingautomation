@@ -6,12 +6,12 @@ import Header from "./Header"
 import CustomPieChart from "./CustomPieChart"
 import CustomPercentageTable from "./CustomPercentageTable"
 import ComplaintCard from "./ComplaintCard"
+import CustomBarChart from "./BarChart"
 
-const COMPLAINT_SUMMARY = {
-  new: 10,
-  open: 50,
-  closed: 30
-};
+
+const COMPLAINT_SUMMARY = [
+  {name: "Complaints", environmental: 30, administrative: 40, safety: 30},
+];
 
 const COMPLAINT_BREAKUP = [
 {
@@ -68,7 +68,7 @@ export default class Dashboard extends React.Component {
               <Row>
                   <Col sm={6}>
                   <div className="chart">
-                    <CustomPercentageTable data={COMPLAINT_SUMMARY} title={"Complaint Data"} />
+                    <CustomBarChart data = {COMPLAINT_SUMMARY}/>
                   </div>
                   </Col>
                   <Col sm={4}>
@@ -81,13 +81,13 @@ export default class Dashboard extends React.Component {
             <div className="lowerPortion">
               <Row>
                   <Col>
-                    <ComplaintCard header={"Administrative"} data={Administrative} />
+                    <ComplaintCard header={"Administrative"} data={open_complaints} />
                   </Col>
                   <Col>
-                    <ComplaintCard header={"Environmental"} data={Environmental} />
+                    <ComplaintCard header={"Environmental"} data={open_complaints} />
                   </Col>
                   <Col>
-                  <ComplaintCard header={"Safety"} data={Safety} />
+                  <ComplaintCard header={"Safety"} data={open_complaints} />
                   </Col>
               </Row>
             </div>
