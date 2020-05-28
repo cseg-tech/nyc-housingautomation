@@ -15,9 +15,9 @@ export default class CustomBarChart extends React.Component {
                     <YAxis label={{ value: "Break up", angle: -90, position: 'insideLeft' }}/>
                     <Tooltip/>
                     <Legend/>
-                    <Bar dataKey="environmental" fill="#00a621" />
-                    <Bar dataKey="administrative" fill="#2600bf" />
-                    <Bar dataKey="safety" fill="#ff0800" />
+                    <Bar dataKey="environmental" fill="#77DD77" />
+                    <Bar dataKey="administrative" fill="#779ECB" />
+                    <Bar dataKey="safety" fill="#FE6B64" />
                 </BarChart>
             </div>
         );
